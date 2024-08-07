@@ -196,22 +196,40 @@ class _MyHomePageState extends State<MyHomePage> {
       //   title: Text(widget.title),
       // ),
 
-      floatingActionButton: FloatingActionButton(
-        child: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
-        onPressed: () {
-          setState(() {
-            animationWidgets.clear();
-            startAnimation = !startAnimation;
+      floatingActionButton: Row(
+        children: [
+          const Expanded(child: SizedBox()),
+          FloatingActionButton.extended(
+            icon: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
+            label: const Text("Random Animation"),
+            onPressed: () {
+              setState(() {
+                animationWidgets.clear();
+                startAnimation = !startAnimation;
 
-            // if (startAnimation) {
-            //   initiateAnimations();
-            // }
-            if (startAnimation) {
-              initializePhrases();
-              randomAnimation();
-            }
-          });
-        },
+                if (startAnimation) {
+                  initializePhrases();
+                  randomAnimation();
+                }
+              });
+            },
+          ),
+          const Expanded(child: SizedBox()),
+          FloatingActionButton.extended(
+            icon: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
+            label: const Text("Animation"),
+            onPressed: () {
+              setState(() {
+                animationWidgets.clear();
+                startAnimation = !startAnimation;
+
+                if (startAnimation) {
+                  initiateAnimations();
+                }
+              });
+            },
+          ),
+        ],
       ),
       body: !startAnimation
           ? const SizedBox()
