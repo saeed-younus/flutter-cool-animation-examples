@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_animation_practice/EmptyWidget.dart';
 import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
 import 'package:flutter_animation_practice/FourWordsAnimation.dart';
 import 'package:flutter_animation_practice/OneWordAnimation.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Animation',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -47,9 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> animationWidgets = [];
 
   final constantPhrases = [
-    [
-      "SEAMLESS"
-    ],
+    ["SEAMLESS"],
     [
       "Boost",
       "Your",
@@ -135,7 +134,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void randomAnimation() {
-    if (phrases.isEmpty) return;
+    if (phrases.isEmpty) {
+      startAnimation = false;
+      if (mounted) {
+        setState(() {});
+      }
+      return;
+    }
 
     int randomIndex = random.nextInt(phrases.length);
 
@@ -195,18 +200,13 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      //   title: Text(widget.title),
-      // ),
-
       floatingActionButton: Row(
         children: [
           const Expanded(child: SizedBox()),
@@ -243,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: !startAnimation
-          ? const SizedBox()
+          ? const EmptyWidget()
           : Stack(
               children: [
                 ...animationWidgets,
