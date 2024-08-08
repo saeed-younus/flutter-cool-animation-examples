@@ -50,28 +50,28 @@ class _MyHomePageState extends State<MyHomePage> {
     [
       "SEAMLESS"
     ],
-    // [
-    //   "Boost",
-    //   "Your",
-    //   "Business",
-    // ],
-    // [
-    //   "with",
-    //   "Motion Graphics".toUpperCase(),
-    //   "LET",
-    //   "US",
-    //   "CREATE",
-    // ],
-    // [
-    //   "LOGO".toUpperCase(),
-    //   "DESIGN".toUpperCase(),
-    // ],
-    // [
-    //   "INTRO",
-    //   "OUTRO",
-    //   "INFORMATION",
-    //   "KINETIC",
-    // ],
+    [
+      "Boost",
+      "Your",
+      "Business",
+    ],
+    [
+      "with",
+      "Motion Graphics".toUpperCase(),
+      "LET",
+      "US",
+      "CREATE",
+    ],
+    [
+      "LOGO".toUpperCase(),
+      "DESIGN".toUpperCase(),
+    ],
+    [
+      "INTRO",
+      "OUTRO",
+      "INFORMATION",
+      "KINETIC",
+    ],
   ];
 
   late List<List<String>> phrases = [];
