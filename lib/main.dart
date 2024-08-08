@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
 import 'package:flutter_animation_practice/FourWordsAnimation.dart';
-import 'package:flutter_animation_practice/ThreeWordAnimation.dart';
+import 'package:flutter_animation_practice/OneWordAnimation.dart';
+import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
 
 void main() {
@@ -47,27 +48,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final constantPhrases = [
     [
-      "Boost",
-      "Your",
-      "Business",
+      "SEAMLESS"
     ],
-    [
-      "with",
-      "Motion Graphics".toUpperCase(),
-      "LET",
-      "US",
-      "CREATE",
-    ],
-    [
-      "LOGO".toUpperCase(),
-      "DESIGN".toUpperCase(),
-    ],
-    [
-      "INTRO",
-      "OUTRO",
-      "INFORMATION",
-      "KINETIC",
-    ],
+    // [
+    //   "Boost",
+    //   "Your",
+    //   "Business",
+    // ],
+    // [
+    //   "with",
+    //   "Motion Graphics".toUpperCase(),
+    //   "LET",
+    //   "US",
+    //   "CREATE",
+    // ],
+    // [
+    //   "LOGO".toUpperCase(),
+    //   "DESIGN".toUpperCase(),
+    // ],
+    // [
+    //   "INTRO",
+    //   "OUTRO",
+    //   "INFORMATION",
+    //   "KINETIC",
+    // ],
   ];
 
   late List<List<String>> phrases = [];
@@ -86,11 +90,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void initiateAnimations() {
     animationWidgets.addAll([
-      ThreeWordAnimation(
+      ThreeWordsAnimation(
         "Boost",
         "Your",
         "Business",
-        exitAnimationStarted: () {
+        onExitAnimation: () {
           setState(() {
             animationWidgets.addAll([
               FiveWordsAnimation(
@@ -99,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 "LET",
                 "US",
                 "CREATE",
-                exitAnimationStarted: () {
+                onExitAnimation: () {
                   setState(() {
                     animationWidgets.addAll([
                       TwoWordsAnimation(
@@ -145,7 +149,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getAnimationWidget(List<String> phrase) {
-    if (phrase.length == 2) {
+    if (phrase.length == 1) {
+      return OneWordAnimation(
+        phrase[0],
+        onExitAnimation: () {
+          randomAnimation();
+        },
+      );
+    } else if (phrase.length == 2) {
       return TwoWordsAnimation(
         phrase[0],
         phrase[1],
@@ -154,11 +165,11 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       );
     } else if (phrase.length == 3) {
-      return ThreeWordAnimation(
+      return ThreeWordsAnimation(
         phrase[0],
         phrase[1],
         phrase[2],
-        exitAnimationStarted: () {
+        onExitAnimation: () {
           randomAnimation();
         },
       );
@@ -179,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
         phrase[2],
         phrase[3],
         phrase[4],
-        exitAnimationStarted: () {
+        onExitAnimation: () {
           randomAnimation();
         },
       );

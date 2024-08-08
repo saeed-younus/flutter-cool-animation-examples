@@ -7,7 +7,7 @@ class FiveWordsAnimation extends StatefulWidget {
   final String word3;
   final String word4;
   final String word5;
-  final Function() exitAnimationStarted;
+  final Function() onExitAnimation;
 
   const FiveWordsAnimation(
     this.word1,
@@ -15,7 +15,7 @@ class FiveWordsAnimation extends StatefulWidget {
     this.word3,
     this.word4,
     this.word5, {
-    required this.exitAnimationStarted,
+    required this.onExitAnimation,
     super.key,
   });
 
@@ -202,7 +202,7 @@ class _FiveWordsAnimationState extends State<FiveWordsAnimation> {
         .animate(
           delay: const Duration(milliseconds: 2500),
           onPlay: (controller) {
-            widget.exitAnimationStarted();
+            widget.onExitAnimation();
           },
         )
         // .animate(delay: const Duration(milliseconds: 5500))

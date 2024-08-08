@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class ThreeWordAnimation extends StatefulWidget {
+class ThreeWordsAnimation extends StatefulWidget {
   final String word1;
   final String word2;
   final String word3;
-  final Function() exitAnimationStarted;
+  final Function() onExitAnimation;
 
-  const ThreeWordAnimation(
+  const ThreeWordsAnimation(
     this.word1,
     this.word2,
     this.word3, {
-    required this.exitAnimationStarted,
+    required this.onExitAnimation,
     super.key,
   });
 
   @override
-  State<ThreeWordAnimation> createState() => _ThreeWordAnimationState();
+  State<ThreeWordsAnimation> createState() => _ThreeWordsAnimationState();
 }
 
-class _ThreeWordAnimationState extends State<ThreeWordAnimation> {
+class _ThreeWordsAnimationState extends State<ThreeWordsAnimation> {
   bool firstCenterTextAnimCompleted = false;
 
   @override
@@ -119,7 +119,7 @@ class _ThreeWordAnimationState extends State<ThreeWordAnimation> {
         .animate(
           delay: const Duration(milliseconds: 2200),
           onPlay: (controller) {
-            widget.exitAnimationStarted();
+            widget.onExitAnimation();
           },
         )
         .blurY(
