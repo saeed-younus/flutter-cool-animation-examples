@@ -32,11 +32,13 @@ class EmptyWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             )
                 .animate()
-                .slide(
+                .slideY(
                   curve: Curves.easeOutBack,
                   duration: const Duration(milliseconds: 500),
                 )
-                .fadeIn(
+                .blurY(
+                  begin: 15,
+                  end: 0,
                   curve: Curves.easeOutBack,
                   duration: const Duration(milliseconds: 500),
                 ),
