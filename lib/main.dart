@@ -133,8 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-  void randomAnimation() {
+  void randomAnimation() async {
     if (phrases.isEmpty) {
+      await Future.delayed(const Duration(milliseconds: 500));
       startAnimation = false;
       if (mounted) {
         setState(() {});
