@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_animate: ^4.5.0
   bordered_text: ^2.0.0
+  image: ^4.2.0
 
 dev_dependencies:
   flutter_test:

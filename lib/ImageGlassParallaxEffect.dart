@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'dart:ui' as ui;
 
 enum AnimAxis {
   X,
@@ -11,7 +12,8 @@ enum AnimAxis {
 class ImageParallaxEffectAnimation extends StatefulWidget {
   final AnimAxis inAxis;
   final AnimAxis outAxis;
-  final String bgImage;
+  // final String bgImage;
+  final ui.Image bgImage;
   final Function() onExitAnimation;
 
   const ImageParallaxEffectAnimation({
@@ -62,8 +64,13 @@ class _ImageParallaxEffectAnimationState
     return Stack(
       children: [
         SizedBox.expand(
-          child: Image.asset(
-            widget.bgImage,
+          // child: Image.asset(
+          //   widget.bgImage,
+          //   fit: BoxFit.cover,
+          //   scale: 1.2,
+          // )
+          child: RawImage(
+            image: widget.bgImage,
             fit: BoxFit.cover,
             scale: 1.2,
           )
@@ -88,8 +95,13 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[0],
-            child: Image.asset(
-              widget.bgImage,
+            // child: Image.asset(
+            //   widget.bgImage,
+            //   fit: BoxFit.cover,
+            //   scale: 1.2,
+            // )
+            child: RawImage(
+              image: widget.bgImage,
               fit: BoxFit.cover,
               scale: 1.2,
             )
@@ -121,11 +133,16 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[1],
-            child: Image.asset(
-              widget.bgImage,
+            child: RawImage(
+              image: widget.bgImage,
               fit: BoxFit.cover,
               scale: 1.2,
             )
+                // child: Image.asset(
+                //   widget.bgImage,
+                //   fit: BoxFit.cover,
+                //   scale: 1.2,
+                // )
                 .animate()
                 .slide(
                   begin: Offset(

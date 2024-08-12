@@ -1,5 +1,7 @@
+import 'dart:isolate';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_practice/EmptyWidget.dart';
 import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
@@ -8,8 +10,14 @@ import 'package:flutter_animation_practice/ImageGlassParallaxEffect.dart';
 import 'package:flutter_animation_practice/OneWordAnimation.dart';
 import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
+import 'dart:ui' as ui;
+import 'package:image/image.dart' as image;
+import 'package:flutter_animation_practice/utils/dart_image.dart';
+import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -45,6 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool startAnimation = false;
 
+  bool initializeCompleted = false;
+
   final List<Widget> animationWidgets = [];
 
   final constantPhrases = [
@@ -75,16 +85,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late List<List<String>> phrases = [];
 
+  late List<ui.Image> cacheImage = [];
+
   Random random = Random();
 
   @override
   void initState() {
     super.initState();
     initializePhrases();
+    initCachedImage();
   }
 
   void initializePhrases() {
     phrases = constantPhrases.toList();
+  }
+
+  void initCachedImage() async {
+    for (int i = 0; i < 6; i++) {
+      final ByteData assetImageByteData =
+          await rootBundle.load("assets/images/image${i + 1}.jpg");
+
+      final resizeImage = await compute((message) async {
+        return await getUiImage(
+          message,
+          1280,
+          1280,
+        );
+      }, assetImageByteData);
+
+      // encoding can only be done on the main thread :')
+      ui.Codec codec =
+          await ui.instantiateImageCodec(image.encodeJpg(resizeImage));
+      ui.FrameInfo frameInfo = await codec.getNextFrame();
+
+      cacheImage.add(frameInfo.image);
+    }
+
+    setState(() {
+      initializeCompleted = true;
+    });
   }
 
   void initiateAnimations() {
@@ -161,7 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final outAxis = Random().nextInt(2) == 0 ? AnimAxis.X : AnimAxis.Y;
     isOutXAxis = outAxis == AnimAxis.X;
     return ImageParallaxEffectAnimation(
-      bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
+      bgImage: cacheImage[random.nextInt(6)],
+      // bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
       inAxis: lastOutXAxis ? AnimAxis.X : AnimAxis.Y,
       outAxis: outAxis,
       onExitAnimation: () {
@@ -226,18 +266,20 @@ class _MyHomePageState extends State<MyHomePage> {
           const Expanded(child: SizedBox()),
           FloatingActionButton.extended(
             icon: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
-            label: const Text("Random Animation"),
-            onPressed: () {
-              setState(() {
-                animationWidgets.clear();
-                startAnimation = !startAnimation;
+            label: Text(initializeCompleted ? "Random Animation" : "Loading.."),
+            onPressed: !initializeCompleted
+                ? null
+                : () {
+                    setState(() {
+                      animationWidgets.clear();
+                      startAnimation = !startAnimation;
 
-                if (startAnimation) {
-                  initializePhrases();
-                  randomAnimation();
-                }
-              });
-            },
+                      if (startAnimation) {
+                        initializePhrases();
+                        randomAnimation();
+                      }
+                    });
+                  },
           ),
           const Expanded(child: SizedBox()),
           FloatingActionButton.extended(
