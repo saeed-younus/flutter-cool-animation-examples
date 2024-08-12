@@ -31,7 +31,6 @@ class _OneWordAnimationState extends State<OneWordAnimation> {
             widget.word1,
             onExitAnimation: widget.onExitAnimation,
           );
-    ;
   }
 }
 

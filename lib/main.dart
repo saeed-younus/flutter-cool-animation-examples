@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animation_practice/EmptyWidget.dart';
 import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
 import 'package:flutter_animation_practice/FourWordsAnimation.dart';
+import 'package:flutter_animation_practice/ImageGlassParallaxEffect.dart';
 import 'package:flutter_animation_practice/OneWordAnimation.dart';
 import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
@@ -154,7 +154,20 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  bool isOutXAxis = false;
+
   Widget getAnimationWidget(List<String> phrase) {
+    bool lastOutXAxis = isOutXAxis;
+    final outAxis = Random().nextInt(2) == 0 ? AnimAxis.X : AnimAxis.Y;
+    isOutXAxis = outAxis == AnimAxis.X;
+    return ImageParallaxEffectAnimation(
+      bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
+      inAxis: lastOutXAxis ? AnimAxis.X : AnimAxis.Y,
+      outAxis: outAxis,
+      onExitAnimation: () {
+        randomAnimation();
+      },
+    );
     if (phrase.length == 1) {
       return OneWordAnimation(
         phrase[0],
