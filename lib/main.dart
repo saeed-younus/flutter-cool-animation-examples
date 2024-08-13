@@ -102,14 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void initCachedImage() async {
     for (int i = 0; i < 6; i++) {
+      // We cannot use rootBundle in Isolate due to it has native binding and native binding cannot be spawned from isolates
       final ByteData assetImageByteData =
           await rootBundle.load("assets/images/image${i + 1}.jpg");
 
-      final resizeImage = await compute((message) async {
+      final resizeImage = await compute((assetImageByteData) async {
         return await getUiImage(
-          message,
-          1280,
-          1280,
+          assetImageByteData,
+          1024,
+          1024,
         );
       }, assetImageByteData);
 

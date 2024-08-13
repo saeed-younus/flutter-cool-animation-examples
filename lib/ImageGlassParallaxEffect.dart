@@ -210,11 +210,23 @@ class _ImageParallaxEffectAnimationState
                 duration: const Duration(milliseconds: 1200),
               )
               .then(delay: const Duration(milliseconds: 1400))
-              .fade(
-                begin: 1,
-                end: 0,
+              .slide(
+                begin: Offset.zero,
+                end: Offset(
+                  widget.outAxis == AnimAxis.X ? 0.25 : 0,
+                  widget.outAxis == AnimAxis.Y ? 0.25 : 0,
+                ),
                 curve: Curves.ease,
-                duration: const Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 1200),
+              )
+              .blur(
+                begin: Offset.zero,
+                end: const Offset(
+                  6,
+                  6,
+                ),
+                curve: Curves.ease,
+                duration: const Duration(milliseconds: 1200),
               ),
         ),
       ],
@@ -233,8 +245,8 @@ class _ImageParallaxEffectAnimationState
         .slide(
           begin: Offset.zero,
           end: Offset(
-            widget.outAxis == AnimAxis.X ? -0.3 : 0,
-            widget.outAxis == AnimAxis.Y ? -0.1 : 0,
+            widget.outAxis == AnimAxis.X ? -0.5 : 0,
+            widget.outAxis == AnimAxis.Y ? -0.5 : 0,
           ),
           curve: Curves.ease,
           duration: const Duration(milliseconds: 1000),
@@ -246,7 +258,7 @@ class _ImageParallaxEffectAnimationState
             1,
           ),
           curve: Curves.ease,
-          duration: const Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 1000),
         );
   }
 }
