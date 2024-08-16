@@ -35,21 +35,38 @@ class _ImageParallaxEffectAnimationState
 
   final List<CustomClipper<Path>> _customClippers = [];
 
+  final List<CustomClipper<Path>> _clipperList = [
+    CenterDiamond(),
+    TriangleRectangle(),
+    CenterRectangle(),
+    BottomLefttRectangle(),
+    BottomRightRectangle(),
+    BottomRectangle(),
+    TopRectangle(),
+  ];
+
   @override
   void initState() {
     super.initState();
 
-    if (_random.nextInt(2) == 0) {
-      _customClippers.add(CenterDiamond());
-      _customClippers.add(TriangleRectangle());
-    } else {
-      _customClippers.add(CenterRectangle());
-      if (_random.nextInt(2) == 0) {
-        _customClippers.add(BottomLefttRectangle());
-      } else {
-        _customClippers.add(BottomRightRectangle());
-      }
+    for (int i = 0; i < 3; i++) {
+      final randomIndex = _random.nextInt(_clipperList.length);
+      final item = _clipperList[randomIndex];
+      _customClippers.add(item);
+      _clipperList.removeAt(randomIndex);
     }
+
+    // if (_random.nextInt(2) == 0) {
+    //   _customClippers.add(CenterDiamond());
+    //   _customClippers.add(TriangleRectangle());
+    // } else {
+    //   _customClippers.add(CenterRectangle());
+    //   if (_random.nextInt(2) == 0) {
+    //     _customClippers.add(BottomLefttRectangle());
+    //   } else {
+    //     _customClippers.add(BottomRightRectangle());
+    //   }
+    // }
 
     Future.delayed(
       const Duration(milliseconds: 2600),
@@ -64,11 +81,6 @@ class _ImageParallaxEffectAnimationState
     return Stack(
       children: [
         SizedBox.expand(
-          // child: Image.asset(
-          //   widget.bgImage,
-          //   fit: BoxFit.cover,
-          //   scale: 1.2,
-          // )
           child: RawImage(
             image: widget.bgImage,
             fit: BoxFit.cover,
@@ -95,11 +107,6 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[0],
-            // child: Image.asset(
-            //   widget.bgImage,
-            //   fit: BoxFit.cover,
-            //   scale: 1.2,
-            // )
             child: RawImage(
               image: widget.bgImage,
               fit: BoxFit.cover,
@@ -138,11 +145,6 @@ class _ImageParallaxEffectAnimationState
               fit: BoxFit.cover,
               scale: 1.2,
             )
-                // child: Image.asset(
-                //   widget.bgImage,
-                //   fit: BoxFit.cover,
-                //   scale: 1.2,
-                // )
                 .animate()
                 .slide(
                   begin: Offset(
@@ -154,6 +156,33 @@ class _ImageParallaxEffectAnimationState
                   duration: const Duration(milliseconds: 1600),
                 )
                 .then(delay: const Duration(milliseconds: 1000))
+                .slide(
+                  begin: Offset.zero,
+                  end: Offset.zero,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 600),
+                ),
+          ),
+        ),
+        SizedBox.expand(
+          child: ClipPath(
+            clipper: _customClippers[2],
+            child: RawImage(
+              image: widget.bgImage,
+              fit: BoxFit.cover,
+              scale: 1.2,
+            )
+                .animate()
+                .slide(
+                  begin: Offset(
+                    widget.inAxis == AnimAxis.X ? 0.07 : -0.07,
+                    widget.inAxis == AnimAxis.Y ? 0.13 : 0.04,
+                  ),
+                  end: Offset.zero,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1500),
+                )
+                .then(delay: const Duration(milliseconds: 1100))
                 .slide(
                   begin: Offset.zero,
                   end: Offset.zero,
@@ -269,8 +298,8 @@ class CenterRectangle extends CustomClipper<Path> {
     Path path = Path()
       ..addRect(
         Rect.fromPoints(
-          Offset(0, (size.height / 2) - 100),
-          Offset(size.width, (size.height / 2) + 100),
+          Offset(0, (size.height / 2) - 150),
+          Offset(size.width, (size.height / 2) + 150),
         ),
       );
 
@@ -289,7 +318,7 @@ class BottomRightRectangle extends CustomClipper<Path> {
     Path path = Path()
       ..addRect(
         Rect.fromPoints(
-          Offset(size.width / 2, (size.height / 2) + 100),
+          Offset(size.width / 2, (size.height / 2) + 150),
           Offset(size.width, size.height),
         ),
       );
@@ -309,8 +338,48 @@ class BottomLefttRectangle extends CustomClipper<Path> {
     Path path = Path()
       ..addRect(
         Rect.fromPoints(
-          Offset(0, (size.height / 2) + 100),
+          Offset(0, (size.height / 2) + 150),
           Offset(size.width / 2, size.height),
+        ),
+      );
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class BottomRectangle extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path()
+      ..addRect(
+        Rect.fromPoints(
+          Offset(0, (size.height / 2) + 150),
+          Offset(size.width, size.height),
+        ),
+      );
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class TopRectangle extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path()
+      ..addRect(
+        Rect.fromPoints(
+          Offset(0, (size.height / 2) + 150),
+          Offset(size.width, size.height),
         ),
       );
 
@@ -327,13 +396,13 @@ class TriangleRectangle extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path1 = Path()
-      ..moveTo(0, (size.height / 2) + 100)
+      ..moveTo(0, (size.height / 2) + 150)
       ..lineTo(0, size.height)
       ..lineTo(size.width / 1.5, size.height)
-      ..lineTo(0, (size.height / 2) + 100);
+      ..lineTo(0, (size.height / 2) + 150);
 
     Path path2 = Path()
-      ..lineTo(size.width / 1.5, (size.height / 2) - 100)
+      ..lineTo(size.width / 1.5, (size.height / 2) - 150)
       ..lineTo(size.width / 1.5, 0)
       ..lineTo(0, 0);
 
@@ -352,9 +421,9 @@ class CenterDiamond extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var points = [
-      Offset(size.width / 2, (size.height / 2) - 100), // point p1
+      Offset(size.width / 2, (size.height / 2) - 150), // point p1
       Offset(0, size.height / 2), // point p2
-      Offset(size.width / 2, (size.height / 2) + 100), // point p3
+      Offset(size.width / 2, (size.height / 2) + 150), // point p3
       Offset(size.width, size.height / 2) // point p4
     ];
 
