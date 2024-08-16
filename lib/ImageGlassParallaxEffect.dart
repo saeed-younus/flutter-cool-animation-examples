@@ -43,6 +43,8 @@ class _ImageParallaxEffectAnimationState
     BottomRightRectangle(),
     BottomRectangle(),
     TopRectangle(),
+    TopLefttRectangle(),
+    TopRightRectangle(),
   ];
 
   @override
@@ -128,6 +130,12 @@ class _ImageParallaxEffectAnimationState
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1400),
                 )
+                .rotate(
+                  begin: 0.05 * (_random.nextInt(3) - 1),
+                  end: 0,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1400),
+                )
                 .then(delay: const Duration(milliseconds: 1200))
                 .slide(
                   begin: Offset.zero,
@@ -155,6 +163,18 @@ class _ImageParallaxEffectAnimationState
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1600),
                 )
+                .scaleXY(
+                  begin: 1.4,
+                  end: 1,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1600),
+                )
+                .rotate(
+                  begin: 0.04 * (_random.nextInt(3) - 1),
+                  end: 0,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1600),
+                )
                 .then(delay: const Duration(milliseconds: 1000))
                 .slide(
                   begin: Offset.zero,
@@ -175,14 +195,26 @@ class _ImageParallaxEffectAnimationState
                 .animate()
                 .slide(
                   begin: Offset(
-                    widget.inAxis == AnimAxis.X ? 0.07 : -0.07,
+                    widget.inAxis == AnimAxis.X ? 0.17 : -0.07,
                     widget.inAxis == AnimAxis.Y ? 0.13 : 0.04,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1500),
+                  duration: const Duration(milliseconds: 1700),
                 )
-                .then(delay: const Duration(milliseconds: 1100))
+                .scaleXY(
+                  begin: 1.3,
+                  end: 1,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1700),
+                )
+                .rotate(
+                  begin: 0.04 * (_random.nextInt(3) - 1),
+                  end: 0,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1700),
+                )
+                .then(delay: const Duration(milliseconds: 900))
                 .slide(
                   begin: Offset.zero,
                   end: Offset.zero,
@@ -340,6 +372,46 @@ class BottomLefttRectangle extends CustomClipper<Path> {
         Rect.fromPoints(
           Offset(0, (size.height / 2) + 150),
           Offset(size.width / 2, size.height),
+        ),
+      );
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class TopRightRectangle extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path()
+      ..addRect(
+        Rect.fromPoints(
+          Offset(size.width / 2, 0),
+          Offset(size.width, (size.height / 2) - 150),
+        ),
+      );
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class TopLefttRectangle extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path()
+      ..addRect(
+        Rect.fromPoints(
+          const Offset(0, 0),
+          Offset(size.width / 2, (size.height / 2) + 150),
         ),
       );
 
