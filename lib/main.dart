@@ -8,6 +8,8 @@ import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
 import 'package:flutter_animation_practice/FourWordsAnimation.dart';
 import 'package:flutter_animation_practice/ImageGlassParallaxEffect.dart';
 import 'package:flutter_animation_practice/OneWordAnimation.dart';
+import 'package:flutter_animation_practice/CutoutAnimations.dart';
+import 'package:flutter_animation_practice/RevealAnimations.dart';
 import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
 import 'dart:ui' as ui;
@@ -59,6 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final constantPhrases = [
     ["SEAMLESS"],
+    ["Your"],
+    ["Business"],
+    ["Motion Graphics"],
+    ["CREATE"],
+    ["DESIGN"],
+    ["INFORMATION"],
     [
       "Boost",
       "Your",
@@ -197,6 +205,25 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isOutXAxis = false;
 
   Widget getAnimationWidget(List<String> phrase) {
+    // reveal animation
+    return TextRevealAnimtaion(
+      text: phrase[0],
+      key: ValueKey(phrase[0]),
+      onExitAnimation: () {
+        randomAnimation();
+      },
+    );
+
+    // cutout animation
+    return TextCutoutAnimtaion(
+      text: phrase[0],
+      key: ValueKey(phrase[0]),
+      onExitAnimation: () {
+        randomAnimation();
+      },
+    );
+
+    // imagees animation
     bool lastOutXAxis = isOutXAxis;
     final outAxis = Random().nextInt(2) == 0 ? AnimAxis.X : AnimAxis.Y;
     isOutXAxis = outAxis == AnimAxis.X;
@@ -209,6 +236,8 @@ class _MyHomePageState extends State<MyHomePage> {
         randomAnimation();
       },
     );
+
+    // multiple text animations
     if (phrase.length == 1) {
       return OneWordAnimation(
         phrase[0],
