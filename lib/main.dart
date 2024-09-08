@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_practice/EmptyWidget.dart';
 import 'package:flutter_animation_practice/FiveWordsAnimation.dart';
+import 'package:flutter_animation_practice/FlowAnimator.dart';
 import 'package:flutter_animation_practice/FourWordsAnimation.dart';
 import 'package:flutter_animation_practice/ImageGlassParallaxEffect.dart';
 import 'package:flutter_animation_practice/OneWordAnimation.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_animation_practice/CutoutAnimations.dart';
 import 'package:flutter_animation_practice/RevealAnimations.dart';
 import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
+import 'package:flutter_animation_practice/models/AnimationModel.dart';
+import 'package:flutter_animation_practice/models/AnimatorModel.dart';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as image;
 import 'package:flutter_animation_practice/utils/dart_image.dart';
@@ -96,6 +99,62 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<ui.Image> cacheImage = [];
 
   Random random = Random();
+
+  int _flowAnimatorIndex = 0;
+
+  late final List<AnimatorModel> _animatorList = List.generate(
+    10,
+    (index) {
+      return AnimatorModel(
+        startPageAnimation: const RevealAnimation(
+          delayInMilli: 0,
+          durationInMilli: 400,
+          type: Reveals.sideHorizontal,
+        ),
+        endPageAnimation: const RevealAnimation(
+          delayInMilli: 1700,
+          durationInMilli: 400,
+          type: Reveals.sideHorizontal,
+        ),
+        startBackgroundAnimation: const RevealAnimation(
+          delayInMilli: 200,
+          durationInMilli: 400,
+          type: Reveals.bottomRightCircular,
+        ),
+        endBackgroundAnimation: const RevealAnimation(
+          delayInMilli: 1700,
+          durationInMilli: 400,
+          type: Reveals.bottomRightCircular,
+        ),
+        startForegroundAnimation: const RevealAnimation(
+          delayInMilli: 700,
+          durationInMilli: 400,
+          type: Reveals.centerVertical,
+        ),
+        endForegroundAnimation: const RevealAnimation(
+          delayInMilli: 1100,
+          durationInMilli: 400,
+          type: Reveals.sideHorizontal,
+        ),
+        backgroundWidget: RawImage(
+          image: cacheImage[0],
+          fit: BoxFit.cover,
+          scale: 1.2,
+        ),
+        foregroundWidget: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            'Hello',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
+      );
+    },
+  );
 
   @override
   void initState() {
@@ -204,6 +263,37 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void nextFlowAnimatorWidget() {
+    if (animationWidgets.length >= 2) {
+      animationWidgets.removeAt(0);
+    }
+    animationWidgets
+        .add(getFlowAnimatorWidget(_animatorList[_flowAnimatorIndex]));
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Widget getFlowAnimatorWidget(AnimatorModel model) {
+    return FlowAnimator(
+      animatorModel: model,
+      onExitAnimation: () async {
+        _flowAnimatorIndex++;
+        if (_animatorList.length == _flowAnimatorIndex) {
+          _flowAnimatorIndex = 0;
+          await Future.delayed(const Duration(milliseconds: 500));
+          startAnimation = false;
+          if (mounted) {
+            setState(() {});
+          }
+          return;
+        }
+
+        nextFlowAnimatorWidget();
+      },
+    );
+  }
+
   bool isOutXAxis = false;
 
   Widget getAnimationWidget(List<String> phrase) {
@@ -227,7 +317,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // imagees animation
     bool lastOutXAxis = isOutXAxis;
-    final outAxis = Random().nextInt(2) == 0 ? ImageParallaxAnimAxis.X : ImageParallaxAnimAxis.Y;
+    final outAxis = Random().nextInt(2) == 0
+        ? ImageParallaxAnimAxis.X
+        : ImageParallaxAnimAxis.Y;
     isOutXAxis = outAxis == ImageParallaxAnimAxis.X;
     return ImageParallaxEffectAnimation(
       bgImage: cacheImage[random.nextInt(6)],
@@ -298,11 +390,30 @@ class _MyHomePageState extends State<MyHomePage> {
           const Expanded(child: SizedBox()),
           FloatingActionButton.extended(
             icon: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
+            label: Text(initializeCompleted ? "Flow Animation" : "Loading.."),
+            onPressed: !initializeCompleted
+                ? null
+                : () {
+                    setState(() {
+                      _flowAnimatorIndex = 0;
+                      animationWidgets.clear();
+                      startAnimation = !startAnimation;
+
+                      if (startAnimation) {
+                        nextFlowAnimatorWidget();
+                      }
+                    });
+                  },
+          ),
+          const Expanded(child: SizedBox()),
+          FloatingActionButton.extended(
+            icon: Icon(startAnimation ? Icons.stop : Icons.play_arrow),
             label: Text(initializeCompleted ? "Random Animation" : "Loading.."),
             onPressed: !initializeCompleted
                 ? null
                 : () {
                     setState(() {
+                      _flowAnimatorIndex = 0;
                       animationWidgets.clear();
                       startAnimation = !startAnimation;
 
@@ -319,6 +430,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: const Text("Animation"),
             onPressed: () {
               setState(() {
+                _flowAnimatorIndex = 0;
                 animationWidgets.clear();
                 startAnimation = !startAnimation;
 

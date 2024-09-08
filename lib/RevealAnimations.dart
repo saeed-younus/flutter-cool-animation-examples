@@ -110,9 +110,15 @@ class _TextRevealAnimtaionState extends State<TextRevealAnimtaion> {
 
 class WidgetRevealAnimtaion extends StatefulWidget {
   final Widget child;
+  final int delayInMilli;
+  final int durationInMilli;
+  final bool forward;
   final Function() onExitAnimation;
   const WidgetRevealAnimtaion({
     required this.child,
+    required this.delayInMilli,
+    required this.durationInMilli,
+    required this.forward,
     required this.onExitAnimation,
     super.key,
   });
@@ -128,43 +134,65 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
 
   late final Reveals revealValue = Reveals.values[_randomIndex];
 
+  bool delayDone = false;
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: TweenAnimationBuilder(
-        tween: Tween<double>(
-          begin: 0,
-          end: 1,
-        ),
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.ease,
-        builder: (context, value, child) {
-          return RevealAnimator(
-            animationValue: value,
-            revealValue: revealValue,
-            child: widget.child,
-          );
-        },
-      )
-          .animate(
-            delay: const Duration(milliseconds: 1000),
-            onComplete: (controller) {
-              widget.onExitAnimation();
-            },
-          )
-          .slideX(
-            begin: 0,
-            end: 5,
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.ease,
-          )
-          .blurX(
-            begin: 0,
-            end: 10,
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.ease,
-          ),
-    );
+        child: !delayDone
+            ? TweenAnimationBuilder( /// this tween implementation for delay
+                tween: Tween<double>(
+                  begin: 0,
+                  end: 1,
+                ),
+                duration: Duration(milliseconds: widget.delayInMilli),
+                onEnd: () {
+                  setState(() {
+                    delayDone = true;
+                  });
+                },
+                builder: (context, value, child) {
+                  return RevealAnimator(
+                    animationValue: widget.forward ? 0 : 1,
+                    revealValue: revealValue,
+                    child: widget.child,
+                  );
+                },
+              )
+            : TweenAnimationBuilder(
+                tween: Tween<double>(
+                  begin: widget.forward ? 0 : 1,
+                  end: widget.forward ? 1 : 0,
+                ),
+                duration: Duration(milliseconds: widget.durationInMilli),
+                curve: Curves.ease,
+                builder: (context, value, child) {
+                  return RevealAnimator(
+                    animationValue: value,
+                    revealValue: revealValue,
+                    child: widget.child,
+                  );
+                },
+              ).animate(
+                delay: Duration(
+                    milliseconds: widget.delayInMilli + widget.durationInMilli),
+                onComplete: (controller) {
+                  widget.onExitAnimation();
+                },
+              )
+        // .slideX(
+        //   begin: 0,
+        //   end: 5,
+        //   duration: const Duration(milliseconds: 600),
+        //   curve: Curves.ease,
+        // )
+        // .blurX(
+        //   begin: 0,
+        //   end: 10,
+        //   duration: const Duration(milliseconds: 600),
+        //   curve: Curves.ease,
+        // ),
+        );
   }
 }
 
