@@ -447,8 +447,8 @@ class CenterCircularRevealClipper extends CustomClipper<Path> {
       ..addOval(
         Rect.fromCircle(
           center: Offset(
-            (size.width / 2) + (size.width / 2 * center!.dx),
-            (size.height / 2) + (size.height / 2 * center!.dy),
+            (size.width / 2) + (size.width / 2 * (center?.dx ?? 0)),
+            (size.height / 2) + (size.height / 2 * (center?.dy ?? 0)),
           ),
           radius: radius * value,
         ),

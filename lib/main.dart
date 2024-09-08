@@ -114,17 +114,19 @@ class _MyHomePageState extends State<MyHomePage> {
       final ByteData assetImageByteData =
           await rootBundle.load("assets/images/image${i + 1}.jpg");
 
-      final resizeImage = await compute((assetImageByteData) async {
-        return await getUiImage(
+      final encodeImage = await compute((assetImageByteData) async {
+        final uiImage = await getUiImage(
           assetImageByteData,
           1024,
           1024,
         );
+        final encodeImage = image.encodeJpg(uiImage);
+        return encodeImage;
       }, assetImageByteData);
 
       // encoding can only be done on the main thread :')
       ui.Codec codec =
-          await ui.instantiateImageCodec(image.encodeJpg(resizeImage));
+          await ui.instantiateImageCodec(encodeImage, allowUpscaling: false);
       ui.FrameInfo frameInfo = await codec.getNextFrame();
 
       cacheImage.add(frameInfo.image);
