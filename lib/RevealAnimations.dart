@@ -110,13 +110,9 @@ class _TextRevealAnimtaionState extends State<TextRevealAnimtaion> {
 
 class WidgetRevealAnimtaion extends StatefulWidget {
   final Widget child;
-  final double height;
-  final double width;
   final Function() onExitAnimation;
   const WidgetRevealAnimtaion({
     required this.child,
-    required this.height,
-    required this.width,
     required this.onExitAnimation,
     super.key,
   });
@@ -135,27 +131,20 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(
-        height: widget.height,
-        width: widget.width,
-        child: FittedBox(
-          fit: BoxFit.fill,
-          child: TweenAnimationBuilder(
-            tween: Tween<double>(
-              begin: 0,
-              end: 1,
-            ),
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.ease,
-            builder: (context, value, child) {
-              return RevealAnimator(
-                animationValue: value,
-                revealValue: revealValue,
-                child: widget.child,
-              );
-            },
-          ),
+      child: TweenAnimationBuilder(
+        tween: Tween<double>(
+          begin: 0,
+          end: 1,
         ),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.ease,
+        builder: (context, value, child) {
+          return RevealAnimator(
+            animationValue: value,
+            revealValue: revealValue,
+            child: widget.child,
+          );
+        },
       )
           .animate(
             delay: const Duration(milliseconds: 1000),

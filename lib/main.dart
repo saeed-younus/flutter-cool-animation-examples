@@ -227,12 +227,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // imagees animation
     bool lastOutXAxis = isOutXAxis;
-    final outAxis = Random().nextInt(2) == 0 ? AnimAxis.X : AnimAxis.Y;
-    isOutXAxis = outAxis == AnimAxis.X;
+    final outAxis = Random().nextInt(2) == 0 ? ImageParallaxAnimAxis.X : ImageParallaxAnimAxis.Y;
+    isOutXAxis = outAxis == ImageParallaxAnimAxis.X;
     return ImageParallaxEffectAnimation(
       bgImage: cacheImage[random.nextInt(6)],
       // bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
-      inAxis: lastOutXAxis ? AnimAxis.X : AnimAxis.Y,
+      inAxis: lastOutXAxis ? ImageParallaxAnimAxis.X : ImageParallaxAnimAxis.Y,
       outAxis: outAxis,
       onExitAnimation: () {
         randomAnimation();

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:ui' as ui;
 
-enum AnimAxis {
+enum ImageParallaxAnimAxis {
   X,
   Y;
 }
 
 class ImageParallaxEffectAnimation extends StatefulWidget {
-  final AnimAxis inAxis;
-  final AnimAxis outAxis;
+  final ImageParallaxAnimAxis inAxis;
+  final ImageParallaxAnimAxis outAxis;
   // final String bgImage;
   final ui.Image bgImage;
   final Function() onExitAnimation;
@@ -91,8 +91,8 @@ class _ImageParallaxEffectAnimationState
               .animate()
               .slide(
                 begin: Offset(
-                  widget.inAxis == AnimAxis.X ? 0.07 : 0,
-                  widget.inAxis == AnimAxis.Y ? 0.03 : 0,
+                  widget.inAxis == ImageParallaxAnimAxis.X ? 0.07 : 0,
+                  widget.inAxis == ImageParallaxAnimAxis.Y ? 0.03 : 0,
                 ),
                 end: Offset.zero,
                 curve: Curves.ease,
@@ -123,8 +123,8 @@ class _ImageParallaxEffectAnimationState
                 )
                 .slide(
                   begin: Offset(
-                    widget.inAxis == AnimAxis.X ? 0.15 : 0,
-                    widget.inAxis == AnimAxis.Y ? 0.1 : 0,
+                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.15 : 0,
+                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.1 : 0,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
@@ -156,8 +156,8 @@ class _ImageParallaxEffectAnimationState
                 .animate()
                 .slide(
                   begin: Offset(
-                    widget.inAxis == AnimAxis.X ? 0.12 : -0.05,
-                    widget.inAxis == AnimAxis.Y ? 0.1 : 0.02,
+                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.12 : -0.05,
+                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.1 : 0.02,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
@@ -195,8 +195,8 @@ class _ImageParallaxEffectAnimationState
                 .animate()
                 .slide(
                   begin: Offset(
-                    widget.inAxis == AnimAxis.X ? 0.17 : -0.07,
-                    widget.inAxis == AnimAxis.Y ? 0.13 : 0.04,
+                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.17 : -0.07,
+                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.13 : 0.04,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
@@ -263,8 +263,8 @@ class _ImageParallaxEffectAnimationState
               )
               .slide(
                 begin: Offset(
-                  widget.inAxis == AnimAxis.X ? 0.5 : 0,
-                  widget.inAxis == AnimAxis.Y ? 2 : 0,
+                  widget.inAxis == ImageParallaxAnimAxis.X ? 0.5 : 0,
+                  widget.inAxis == ImageParallaxAnimAxis.Y ? 2 : 0,
                 ),
                 end: Offset.zero,
                 curve: Curves.ease,
@@ -274,8 +274,8 @@ class _ImageParallaxEffectAnimationState
               .slide(
                 begin: Offset.zero,
                 end: Offset(
-                  widget.outAxis == AnimAxis.X ? 0.25 : 0,
-                  widget.outAxis == AnimAxis.Y ? 0.25 : 0,
+                  widget.outAxis == ImageParallaxAnimAxis.X ? 0.25 : 0,
+                  widget.outAxis == ImageParallaxAnimAxis.Y ? 0.25 : 0,
                 ),
                 curve: Curves.ease,
                 duration: const Duration(milliseconds: 1200),
@@ -295,8 +295,8 @@ class _ImageParallaxEffectAnimationState
         .animate()
         .slide(
           begin: Offset(
-            widget.inAxis == AnimAxis.X ? 1 : 0,
-            widget.inAxis == AnimAxis.Y ? 1 : 0,
+            widget.inAxis == ImageParallaxAnimAxis.X ? 1 : 0,
+            widget.inAxis == ImageParallaxAnimAxis.Y ? 1 : 0,
           ),
           end: Offset.zero,
           curve: Curves.decelerate,
@@ -306,8 +306,8 @@ class _ImageParallaxEffectAnimationState
         .slide(
           begin: Offset.zero,
           end: Offset(
-            widget.outAxis == AnimAxis.X ? -0.5 : 0,
-            widget.outAxis == AnimAxis.Y ? -0.5 : 0,
+            widget.outAxis == ImageParallaxAnimAxis.X ? -0.5 : 0,
+            widget.outAxis == ImageParallaxAnimAxis.Y ? -0.5 : 0,
           ),
           curve: Curves.ease,
           duration: const Duration(milliseconds: 1000),
