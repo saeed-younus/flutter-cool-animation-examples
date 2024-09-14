@@ -68,12 +68,12 @@ class _TextCutoutAnimtaionState extends State<TextCutoutAnimtaion> {
   }
 }
 
-class WidgetCutoutAnimtaion extends StatefulWidget {
+class CutoutAnimtaionForChecking extends StatefulWidget {
   final Widget child;
   final double height;
   final double width;
   final Function() onExitAnimation;
-  const WidgetCutoutAnimtaion({
+  const CutoutAnimtaionForChecking({
     required this.child,
     required this.height,
     required this.width,
@@ -82,10 +82,12 @@ class WidgetCutoutAnimtaion extends StatefulWidget {
   });
 
   @override
-  State<WidgetCutoutAnimtaion> createState() => _WidgetCutoutAnimtaionState();
+  State<CutoutAnimtaionForChecking> createState() =>
+      _CutoutAnimtaionForCheckingState();
 }
 
-class _WidgetCutoutAnimtaionState extends State<WidgetCutoutAnimtaion> {
+class _CutoutAnimtaionForCheckingState
+    extends State<CutoutAnimtaionForChecking> {
   final Random _random = Random();
 
   late final int _randomIndex = _random.nextInt(Cutouts.values.length);
@@ -115,12 +117,65 @@ class _WidgetCutoutAnimtaionState extends State<WidgetCutoutAnimtaion> {
   }
 }
 
+class WidgetCutoutAnimtaion extends StatefulWidget {
+  final Widget child;
+  final int delayInMilli;
+  final int durationInMilli;
+  final bool forward;
+  final Function() onExitAnimation;
+  const WidgetCutoutAnimtaion({
+    required this.child,
+    required this.delayInMilli,
+    required this.durationInMilli,
+    required this.forward,
+    required this.onExitAnimation,
+    super.key,
+  });
+
+  @override
+  State<WidgetCutoutAnimtaion> createState() => _WidgetCutoutAnimtaionState();
+}
+
+class _WidgetCutoutAnimtaionState extends State<WidgetCutoutAnimtaion> {
+  final Random _random = Random();
+
+  late final int _randomIndex = _random.nextInt(Cutouts.values.length);
+
+  late final Cutouts cutoutValue = Cutouts.values[_randomIndex];
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CutoutAnimator(
+        cutoutValue: cutoutValue,
+        widget: widget.child,
+        forward: widget.forward,
+        durationInMilli: widget.durationInMilli,
+        delayInMilli: widget.delayInMilli,
+      ).animate(
+        delay: Duration(
+          milliseconds: widget.delayInMilli + widget.durationInMilli,
+        ),
+        onComplete: (controller) {
+          widget.onExitAnimation();
+        },
+      ),
+    );
+  }
+}
+
 class CutoutAnimator extends StatelessWidget {
   final Cutouts cutoutValue;
   final Widget widget;
+  final bool forward;
+  final int delayInMilli;
+  final int durationInMilli;
   const CutoutAnimator({
     required this.cutoutValue,
     required this.widget,
+    this.forward = true,
+    this.delayInMilli = 400,
+    this.durationInMilli = 400,
     super.key,
   });
 
@@ -137,25 +192,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slideY(
-                  begin: -2,
-                  end: 0,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slideY(
-                  begin: 0,
-                  end: -2,
+                  begin: forward ? -10 : 0,
+                  end: forward ? 0 : -10,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slideY(
+            //   begin: 0,
+            //   end: -2,
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
             FittedBox(
               fit: BoxFit.fill,
               child: ClipPath(
@@ -163,25 +220,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slideY(
-                  begin: 2,
-                  end: 0,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slideY(
-                  begin: 0,
-                  end: 2,
+                  begin: forward ? 10 : 0,
+                  end: forward ? 0 : 10,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slideY(
+            //   begin: 0,
+            //   end: 2,
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
           ],
         );
       case Cutouts.centerHorizontal:
@@ -194,25 +253,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slideX(
-                  begin: -2,
-                  end: 0,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slideX(
-                  begin: 0,
-                  end: -2,
+                  begin: forward ? -5 : 0,
+                  end: forward ? 0 : -5,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slideX(
+            //   begin: 0,
+            //   end: -2,
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
             FittedBox(
               fit: BoxFit.fill,
               child: ClipPath(
@@ -220,25 +281,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slideX(
-                  begin: 2,
-                  end: 0,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slideX(
-                  begin: 0,
-                  end: 2,
+                  begin: forward ? 5 : 0,
+                  end: forward ? 0 : 5,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slideX(
+            //   begin: 0,
+            //   end: 2,
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
           ],
         );
       case Cutouts.topRightBottomLeft:
@@ -251,25 +314,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slide(
-                  begin: const Offset(2, -2),
-                  end: Offset.zero,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slide(
-                  begin: Offset.zero,
-                  end: const Offset(2, -2),
+                  begin: forward ? const Offset(5, -5) : Offset.zero,
+                  end: forward ? Offset.zero : const Offset(5, -5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slide(
+            //   begin: Offset.zero,
+            //   end: const Offset(5, -5),
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
             FittedBox(
               fit: BoxFit.fill,
               child: ClipPath(
@@ -277,25 +342,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slide(
-                  begin: const Offset(-2, 2),
-                  end: Offset.zero,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slide(
-                  begin: Offset.zero,
-                  end: const Offset(-2, 2),
+                  begin: forward ? const Offset(-5, 5) : Offset.zero,
+                  end: forward ? Offset.zero : const Offset(-5, 5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slide(
+            //   begin: Offset.zero,
+            //   end: const Offset(-5, 5),
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
           ],
         );
       case Cutouts.topLeftBottomRight:
@@ -308,25 +375,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slide(
-                  begin: const Offset(-2, -2),
-                  end: Offset.zero,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slide(
-                  begin: Offset.zero,
-                  end: const Offset(-2, -2),
+                  begin: forward ? const Offset(-5, -5) : Offset.zero,
+                  end: forward ? Offset.zero : const Offset(-5, -5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slide(
+            //   begin: Offset.zero,
+            //   end: const Offset(-5 -5),
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
             FittedBox(
               fit: BoxFit.fill,
               child: ClipPath(
@@ -334,25 +403,27 @@ class CutoutAnimator extends StatelessWidget {
                 child: widget,
               ),
             )
-                .animate()
-                .slide(
-                  begin: const Offset(2, 2),
-                  end: Offset.zero,
-                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
+                .animate(
+                  delay: Duration(milliseconds: delayInMilli),
                 )
-                .then(delay: const Duration(milliseconds: 600))
                 .slide(
-                  begin: Offset.zero,
-                  end: const Offset(2, 2),
+                  begin: forward ? const Offset(5, 5) : Offset.zero,
+                  end: forward ? Offset.zero : const Offset(5, 5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-                  duration: const Duration(milliseconds: 600),
-                )
-                .fade(
-                  begin: 1,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: durationInMilli),
                 ),
+            // .then(delay: const Duration(milliseconds: 600))
+            // .slide(
+            //   begin: Offset.zero,
+            //   end: const Offset(5, 5),
+            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+            //   duration: const Duration(milliseconds: 600),
+            // )
+            // .fade(
+            //   begin: 1,
+            //   end: 0,
+            //   duration: const Duration(milliseconds: 600),
+            // ),
           ],
         );
       default:

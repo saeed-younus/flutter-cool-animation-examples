@@ -140,7 +140,8 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
   Widget build(BuildContext context) {
     return Center(
         child: !delayDone
-            ? TweenAnimationBuilder( /// this tween implementation for delay
+            ? TweenAnimationBuilder(
+                /// this tween implementation for delay
                 tween: Tween<double>(
                   begin: 0,
                   end: 1,
@@ -175,7 +176,8 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
                 },
               ).animate(
                 delay: Duration(
-                    milliseconds: widget.delayInMilli + widget.durationInMilli),
+                  milliseconds: widget.delayInMilli + widget.durationInMilli,
+                ),
                 onComplete: (controller) {
                   widget.onExitAnimation();
                 },

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_animation_practice/FourWordsAnimation.dart';
+import 'package:flutter_animation_practice/CutoutAnimations.dart';
 import 'package:flutter_animation_practice/RevealAnimations.dart';
 import 'package:flutter_animation_practice/models/AnimationModel.dart';
 import 'package:flutter_animation_practice/models/AnimatorModel.dart';
+import 'package:uuid/uuid.dart';
+
+final uuid = Uuid();
 
 class FlowAnimator extends StatefulWidget {
   final AnimatorModel animatorModel;
@@ -21,8 +24,24 @@ class FlowAnimator extends StatefulWidget {
 
 class _FlowAnimatorState extends State<FlowAnimator> {
   @override
+  void initState() {
+    super.initState();
+    if (widget.animatorModel.endPageAnimation is! RevealAnimation) {
+      Future.delayed(
+        Duration(
+          milliseconds: widget.animatorModel.endPageAnimation.delayInMilli,
+        ),
+        () {
+          widget.onExitAnimation();
+        },
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
+      color: const Color(0xFF000000),
       child: Stack(
         children: [
           WidgetAnimator(
@@ -42,33 +61,38 @@ class _FlowAnimatorState extends State<FlowAnimator> {
               milliseconds:
                   widget.animatorModel.startPageAnimation.delayInMilli,
             ),
+            onComplete: (controller) {
+              widget.onExitAnimation();
+            },
           )
           .slideX(
-            begin: 2,
+            begin: widget.animatorModel.startPageAnimation is RevealAnimation
+                ? 0
+                : 2,
             end: 0,
             curve: Curves.ease,
             duration: Duration(
               milliseconds:
                   widget.animatorModel.startPageAnimation.durationInMilli,
             ),
+          )
+          .then(
+            delay: Duration(
+              milliseconds: widget.animatorModel.endPageAnimation.delayInMilli,
+            ),
+          )
+          .slideX(
+            begin: 0,
+            end: widget.animatorModel.endPageAnimation is RevealAnimation
+                ? 0
+                : -0.75,
+            curve: Curves.ease,
+            duration: Duration(
+              milliseconds:
+                  widget.animatorModel.endPageAnimation.durationInMilli,
+            ),
           ),
-    )
-        .animate(
-          delay: Duration(
-            milliseconds: widget.animatorModel.endPageAnimation.delayInMilli,
-          ),
-          onComplete: (controller) {
-            widget.onExitAnimation();
-          },
-        )
-        .slideX(
-          begin: 0,
-          end: -0.75,
-          curve: Curves.ease,
-          duration: Duration(
-            milliseconds: widget.animatorModel.endPageAnimation.durationInMilli,
-          ),
-        );
+    );
   }
 }
 
@@ -102,13 +126,13 @@ class _WidgetAnimatorState extends State<WidgetAnimator> {
                 startAnimationCompleted = true;
               });
             },
-            true,
+            false,
           )
         : getAnimationWidget(
             widget.endAnimation,
             widget.child,
             () {},
-            false,
+            true,
           );
   }
 
@@ -117,6 +141,7 @@ class _WidgetAnimatorState extends State<WidgetAnimator> {
     switch (model) {
       case RevealAnimation():
         return WidgetRevealAnimtaion(
+          key: Key(uuid.v4()),
           delayInMilli: model.delayInMilli,
           durationInMilli: model.durationInMilli,
           forward: !exitAnimation,
@@ -124,7 +149,8 @@ class _WidgetAnimatorState extends State<WidgetAnimator> {
           child: child,
         );
       case CutoutAnimation():
-        return WidgetRevealAnimtaion(
+        return WidgetCutoutAnimtaion(
+          key: Key(uuid.v4()),
           delayInMilli: model.delayInMilli,
           durationInMilli: model.durationInMilli,
           forward: !exitAnimation,
@@ -133,6 +159,7 @@ class _WidgetAnimatorState extends State<WidgetAnimator> {
         );
       case ImageParallaxAnimation():
         return WidgetRevealAnimtaion(
+          key: Key(uuid.v4()),
           delayInMilli: model.delayInMilli,
           durationInMilli: model.durationInMilli,
           forward: !exitAnimation,

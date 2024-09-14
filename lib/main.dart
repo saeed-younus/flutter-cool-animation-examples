@@ -35,9 +35,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Animation',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+          useMaterial3: true),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -111,35 +110,50 @@ class _MyHomePageState extends State<MyHomePage> {
           durationInMilli: 400,
           type: Reveals.sideHorizontal,
         ),
-        endPageAnimation: const RevealAnimation(
-          delayInMilli: 1700,
-          durationInMilli: 400,
-          type: Reveals.sideHorizontal,
-        ),
         startBackgroundAnimation: const RevealAnimation(
           delayInMilli: 200,
           durationInMilli: 400,
           type: Reveals.bottomRightCircular,
         ),
-        endBackgroundAnimation: const RevealAnimation(
-          delayInMilli: 1700,
-          durationInMilli: 400,
-          type: Reveals.bottomRightCircular,
-        ),
-        startForegroundAnimation: const RevealAnimation(
+        startForegroundAnimation: const CutoutAnimation(
           delayInMilli: 700,
           durationInMilli: 400,
-          type: Reveals.centerVertical,
+          type: Cutouts.centerHorizontal,
         ),
-        endForegroundAnimation: const RevealAnimation(
-          delayInMilli: 1100,
+        // startForegroundAnimation: const RevealAnimation(
+        //   delayInMilli: 700,
+        //   durationInMilli: 400,
+        //   type: Reveals.centerVertical,
+        // ),
+        endForegroundAnimation: const CutoutAnimation(
+          delayInMilli: 200,
+          durationInMilli: 400,
+          type: Cutouts.centerHorizontal,
+        ),
+        // endForegroundAnimation: const RevealAnimation(
+        //   delayInMilli: 400,
+        //   durationInMilli: 400,
+        //   type: Reveals.sideHorizontal,
+        // ),
+        endBackgroundAnimation: const RevealAnimation(
+          delayInMilli: 1700,
+          durationInMilli: 800,
+          type: Reveals.bottomRightCircular,
+        ),
+        endPageAnimation: const RevealAnimation(
+          delayInMilli: 2700,
           durationInMilli: 400,
           type: Reveals.sideHorizontal,
         ),
-        backgroundWidget: RawImage(
-          image: cacheImage[0],
-          fit: BoxFit.cover,
-          scale: 1.2,
+        backgroundWidget: SizedBox(
+          height: MediaQuery.sizeOf(context).height,
+          child: RawImage(
+            image: index % 3 == 0
+                ? cacheImage[0]
+                : (index % 2 == 0 ? cacheImage[1] : cacheImage[2]),
+            fit: BoxFit.cover,
+            scale: 1.2,
+          ),
         ),
         foregroundWidget: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -264,9 +278,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void nextFlowAnimatorWidget() {
-    if (animationWidgets.length >= 2) {
-      animationWidgets.removeAt(0);
-    }
+    // if (animationWidgets.length >= 2) {
+    //   animationWidgets.removeAt(0);
+    // }
     animationWidgets
         .add(getFlowAnimatorWidget(_animatorList[_flowAnimatorIndex]));
     if (mounted) {
