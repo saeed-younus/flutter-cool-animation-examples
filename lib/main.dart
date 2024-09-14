@@ -135,11 +135,16 @@ class _MyHomePageState extends State<MyHomePage> {
         //   durationInMilli: 400,
         //   type: Reveals.sideHorizontal,
         // ),
-        endBackgroundAnimation: const RevealAnimation(
+        endBackgroundAnimation: const CutoutAnimation(
           delayInMilli: 1700,
-          durationInMilli: 800,
-          type: Reveals.bottomRightCircular,
+          durationInMilli: 4800,
+          type: Cutouts.centerHorizontal,
         ),
+        // endBackgroundAnimation: const RevealAnimation(
+        //   delayInMilli: 1700,
+        //   durationInMilli: 800,
+        //   type: Reveals.bottomRightCircular,
+        // ),
         endPageAnimation: const RevealAnimation(
           delayInMilli: 2700,
           durationInMilli: 400,

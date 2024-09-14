@@ -185,12 +185,9 @@ class CutoutAnimator extends StatelessWidget {
       case Cutouts.centerVertical:
         return Stack(
           children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: HalfLeftRectangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: HalfLeftRectangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -213,12 +210,9 @@ class CutoutAnimator extends StatelessWidget {
             //   end: 0,
             //   duration: const Duration(milliseconds: 600),
             // ),
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: HalfRightRectangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: HalfRightRectangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -246,12 +240,9 @@ class CutoutAnimator extends StatelessWidget {
       case Cutouts.centerHorizontal:
         return Stack(
           children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: HalfTopRectangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: HalfTopRectangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -274,12 +265,9 @@ class CutoutAnimator extends StatelessWidget {
             //   end: 0,
             //   duration: const Duration(milliseconds: 600),
             // ),
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: HalfBottomRectangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: HalfBottomRectangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -307,12 +295,9 @@ class CutoutAnimator extends StatelessWidget {
       case Cutouts.topRightBottomLeft:
         return Stack(
           children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: LeftTopTriangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: LeftTopTriangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -335,12 +320,9 @@ class CutoutAnimator extends StatelessWidget {
             //   end: 0,
             //   duration: const Duration(milliseconds: 600),
             // ),
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: RightBottomTriangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: RightBottomTriangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -368,12 +350,9 @@ class CutoutAnimator extends StatelessWidget {
       case Cutouts.topLeftBottomRight:
         return Stack(
           children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: RightTopTriangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: RightTopTriangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
@@ -396,12 +375,9 @@ class CutoutAnimator extends StatelessWidget {
             //   end: 0,
             //   duration: const Duration(milliseconds: 600),
             // ),
-            FittedBox(
-              fit: BoxFit.fill,
-              child: ClipPath(
-                clipper: LeftBottomTriangle(),
-                child: widget,
-              ),
+            ClipPath(
+              clipper: LeftBottomTriangle(),
+              child: widget,
             )
                 .animate(
                   delay: Duration(milliseconds: delayInMilli),
