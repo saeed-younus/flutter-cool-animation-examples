@@ -2,22 +2,47 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'dart:ui' as ui;
 
-enum ImageParallaxAnimAxis {
-  X,
-  Y;
+// n = negative axis
+// enum ImageParallaxAnimAxis {
+//   X,
+//   Y,
+//   Z;
+
+//   const ImageParallaxAnimAxis({
+//     required this.negativeAxis,
+//   });
+
+//   final bool negativeAxis;
+// }
+
+sealed class ImageParallaxAnimAxis {
+  final bool negativeAxis;
+  ImageParallaxAnimAxis([this.negativeAxis = false]);
+}
+
+class X extends ImageParallaxAnimAxis {
+  X([super.negativeAxis]);
+}
+
+class Y extends ImageParallaxAnimAxis {
+  Y([super.negativeAxis]);
+}
+
+class Z extends ImageParallaxAnimAxis {
+  Z([super.negativeAxis]);
 }
 
 class ImageParallaxEffectAnimation extends StatefulWidget {
   final ImageParallaxAnimAxis inAxis;
   final ImageParallaxAnimAxis outAxis;
-  // final String bgImage;
-  final ui.Image bgImage;
+  final Widget background;
+  final Widget? foreground;
   final Function() onExitAnimation;
 
   const ImageParallaxEffectAnimation({
-    required this.bgImage,
+    required this.background,
+    this.foreground,
     required this.inAxis,
     required this.outAxis,
     required this.onExitAnimation,
@@ -83,17 +108,21 @@ class _ImageParallaxEffectAnimationState
     return Stack(
       children: [
         SizedBox.expand(
-          child: RawImage(
-            image: widget.bgImage,
-            fit: BoxFit.cover,
-            scale: 1.2,
-          )
+          child: widget.background
               .animate()
+              .scaleXY(
+                begin: widget.inAxis is Z ? 1 : 1.2,
+                end: 1.2,
+                curve: Curves.ease,
+                duration: const Duration(milliseconds: 1200),
+              )
               .slide(
-                begin: Offset(
-                  widget.inAxis == ImageParallaxAnimAxis.X ? 0.07 : 0,
-                  widget.inAxis == ImageParallaxAnimAxis.Y ? 0.03 : 0,
-                ),
+                begin: widget.inAxis is Z
+                    ? Offset.zero
+                    : Offset(
+                        widget.inAxis is X ? 0.07 : 0,
+                        widget.inAxis is Y ? 0.03 : 0,
+                      ),
                 end: Offset.zero,
                 curve: Curves.ease,
                 duration: const Duration(milliseconds: 1200),
@@ -109,37 +138,36 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[0],
-            child: RawImage(
-              image: widget.bgImage,
-              fit: BoxFit.cover,
-              scale: 1.2,
-            )
+            child: widget.background
                 .animate()
                 .scaleXY(
-                  begin: 1.1,
-                  end: 1,
+                  begin: widget.inAxis is Z ? 0.9 : 1.2,
+                  end: 1.2,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1400),
                 )
                 .slide(
                   begin: Offset(
-                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.15 : 0,
-                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.1 : 0,
+                    widget.inAxis is X ? 0.15 : 0,
+                    widget.inAxis is Y ? 0.1 : 0,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1400),
                 )
-                .rotate(
-                  begin: 0.05 * (_random.nextInt(3) - 1),
-                  end: 0,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1400),
-                )
+                // .rotate(
+                //   begin: 0.05 * (_random.nextInt(3) - 1),
+                //   end: 0,
+                //   curve: Curves.ease,
+                //   duration: const Duration(milliseconds: 1400),
+                // )
                 .then(delay: const Duration(milliseconds: 1200))
                 .slide(
                   begin: Offset.zero,
-                  end: Offset.zero,
+                  end: Offset(
+                    widget.outAxis is X ? -0.15 : 0,
+                    widget.outAxis is Y ? -0.1 : 0,
+                  ),
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 600),
                 ),
@@ -148,37 +176,36 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[1],
-            child: RawImage(
-              image: widget.bgImage,
-              fit: BoxFit.cover,
-              scale: 1.2,
-            )
+            child: widget.background
                 .animate()
                 .slide(
                   begin: Offset(
-                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.12 : -0.05,
-                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.1 : 0.02,
+                    widget.inAxis is X ? 0.12 : 0,
+                    widget.inAxis is Y ? 0.1 : 0,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1600),
                 )
                 .scaleXY(
-                  begin: 1.4,
-                  end: 1,
+                  begin: widget.inAxis is Z ? 0.8 : 1.2,
+                  end: 1.2,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1600),
                 )
-                .rotate(
-                  begin: 0.04 * (_random.nextInt(3) - 1),
-                  end: 0,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1600),
-                )
+                // .rotate(
+                //   begin: 0.04 * (_random.nextInt(3) - 1),
+                //   end: 0,
+                //   curve: Curves.ease,
+                //   duration: const Duration(milliseconds: 1600),
+                // )
                 .then(delay: const Duration(milliseconds: 1000))
                 .slide(
                   begin: Offset.zero,
-                  end: Offset.zero,
+                  end: Offset(
+                    widget.outAxis is X ? -0.12 : 0,
+                    widget.outAxis is Y ? -0.1 : 0,
+                  ),
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 600),
                 ),
@@ -187,139 +214,145 @@ class _ImageParallaxEffectAnimationState
         SizedBox.expand(
           child: ClipPath(
             clipper: _customClippers[2],
-            child: RawImage(
-              image: widget.bgImage,
-              fit: BoxFit.cover,
-              scale: 1.2,
-            )
+            child: widget.background
                 .animate()
                 .slide(
                   begin: Offset(
-                    widget.inAxis == ImageParallaxAnimAxis.X ? 0.17 : -0.07,
-                    widget.inAxis == ImageParallaxAnimAxis.Y ? 0.13 : 0.04,
+                    widget.inAxis is X ? 0.17 : 0,
+                    widget.inAxis is Y ? 0.13 : 0,
                   ),
                   end: Offset.zero,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1700),
                 )
                 .scaleXY(
-                  begin: 1.3,
-                  end: 1,
+                  begin: widget.inAxis is Z ? 0.7 : 1.2,
+                  end: 1.2,
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 1700),
                 )
-                .rotate(
-                  begin: 0.04 * (_random.nextInt(3) - 1),
-                  end: 0,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1700),
-                )
+                // .rotate(
+                //   begin: 0.04 * (_random.nextInt(3) - 1),
+                //   end: 0,
+                //   curve: Curves.ease,
+                //   duration: const Duration(milliseconds: 1700),
+                // )
                 .then(delay: const Duration(milliseconds: 900))
                 .slide(
                   begin: Offset.zero,
-                  end: Offset.zero,
+                  end: Offset(
+                    widget.outAxis is X ? -0.17 : 0,
+                    widget.outAxis is Y ? -0.13 : 0,
+                  ),
                   curve: Curves.ease,
                   duration: const Duration(milliseconds: 600),
                 ),
           ),
         ),
-        Container(
-          color: const Color(0x11000000),
-          width: double.infinity,
-          height: double.infinity,
-          child: const SizedBox(),
-        ),
-        Center(
-          child: SizedBox(
-            height: 48,
-            width: 200,
-            child: FittedBox(
-              fit: BoxFit.fill,
-              child: Text(
-                "QUICK",
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                  height: 0.77,
-                  letterSpacing: -2,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  shadows: [
-                    const BoxShadow(
-                      color: Color(0x33000000),
-                      offset: Offset(0, 4),
-                      blurStyle: BlurStyle.outer,
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
+        widget.foreground == null
+            ? const SizedBox()
+            : Container(
+                color: const Color(0x11000000),
+                width: double.infinity,
+                height: double.infinity,
+                child: const SizedBox(),
               ),
-            ),
-          )
-              .animate()
-              .fade(
-                begin: 0.3,
-                end: 1,
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
-              )
-              .slide(
-                begin: Offset(
-                  widget.inAxis == ImageParallaxAnimAxis.X ? 0.5 : 0,
-                  widget.inAxis == ImageParallaxAnimAxis.Y ? 2 : 0,
+        widget.foreground == null
+            ? const SizedBox()
+            : widget.foreground!
+                .animate()
+                .fade(
+                  begin: 0.3,
+                  end: 1,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1200),
+                )
+                .slide(
+                  begin: Offset(
+                    widget.inAxis is X ? 0.5 : 0,
+                    widget.inAxis is Y ? 2 : 0,
+                  ),
+                  end: Offset.zero,
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1200),
+                )
+                .then(delay: const Duration(milliseconds: 1400))
+                .slide(
+                  begin: Offset.zero,
+                  end: Offset(
+                    widget.outAxis is X ? 0.25 : 0,
+                    widget.outAxis is Y ? 0.25 : 0,
+                  ),
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1200),
+                )
+                .blur(
+                  begin: Offset.zero,
+                  end: const Offset(
+                    6,
+                    6,
+                  ),
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 1200),
                 ),
-                end: Offset.zero,
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
-              )
-              .then(delay: const Duration(milliseconds: 1400))
-              .slide(
-                begin: Offset.zero,
-                end: Offset(
-                  widget.outAxis == ImageParallaxAnimAxis.X ? 0.25 : 0,
-                  widget.outAxis == ImageParallaxAnimAxis.Y ? 0.25 : 0,
-                ),
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
-              )
-              .blur(
-                begin: Offset.zero,
-                end: const Offset(
-                  6,
-                  6,
-                ),
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
-              ),
-        ),
       ],
     )
         .animate()
-        .slide(
-          begin: Offset(
-            widget.inAxis == ImageParallaxAnimAxis.X ? 1 : 0,
-            widget.inAxis == ImageParallaxAnimAxis.Y ? 1 : 0,
-          ),
-          end: Offset.zero,
-          curve: Curves.decelerate,
+        .scaleXY(
+          begin: widget.inAxis is Z ? 1 : 1,
+          end: 1,
+          curve: Curves.easeInCubic,
           duration: const Duration(milliseconds: 600),
         )
-        .then(delay: const Duration(milliseconds: 2000))
+        .fade(
+          begin: widget.inAxis is Z ? 0 : 1,
+          end: 1,
+          curve: Curves.easeInCubic,
+          duration: const Duration(milliseconds: 600),
+        )
+        .slide(
+          begin: Offset(
+            widget.inAxis is X ? 1 : 0,
+            widget.inAxis is Y ? 1 : 0,
+          ),
+          end: Offset.zero,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 600),
+        )
+        .then(
+          delay: Duration(
+            milliseconds: 2000 - (widget.outAxis is Z ? 300 : 0),
+          ),
+        )
         .slide(
           begin: Offset.zero,
           end: Offset(
-            widget.outAxis == ImageParallaxAnimAxis.X ? -0.5 : 0,
-            widget.outAxis == ImageParallaxAnimAxis.Y ? -0.5 : 0,
+            widget.outAxis is X ? -1 : 0,
+            widget.outAxis is Y ? -1 : 0,
           ),
           curve: Curves.ease,
-          duration: const Duration(milliseconds: 1000),
+          duration: const Duration(milliseconds: 600),
+        )
+        .scaleXY(
+          begin: 1,
+          end: widget.outAxis is Z ? 3 : 1,
+          curve: Curves.easeInCubic,
+          duration: const Duration(milliseconds: 600),
+        )
+        .fade(
+          begin: 1,
+          end: widget.outAxis is Z ? 0 : 1,
+          curve: Curves.easeInCubic,
+          duration: const Duration(milliseconds: 600),
         )
         .blur(
           begin: Offset.zero,
           end: const Offset(
-            1,
-            1,
+            2,
+            2,
           ),
-          curve: Curves.ease,
-          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInCubic,
+          duration: const Duration(milliseconds: 600),
         );
   }
 }

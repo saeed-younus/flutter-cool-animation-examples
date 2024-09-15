@@ -15,6 +15,7 @@ import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
 import 'package:flutter_animation_practice/models/AnimationModel.dart';
 import 'package:flutter_animation_practice/models/AnimatorModel.dart';
+import 'package:flutter_animation_practice/presentations/ImageSlidePresentation.dart';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as image;
 import 'package:flutter_animation_practice/utils/dart_image.dart';
@@ -62,6 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> animationWidgets = [];
 
   final constantPhrases = [
+    [
+      "With",
+      "Great".toUpperCase(),
+      "Power",
+      "Comes",
+      "Great",
+      "Responsibilities",
+    ],
     ["SEAMLESS"],
     ["Your"],
     ["Business"],
@@ -286,11 +295,25 @@ class _MyHomePageState extends State<MyHomePage> {
     // if (animationWidgets.length >= 2) {
     //   animationWidgets.removeAt(0);
     // }
-    animationWidgets
-        .add(getFlowAnimatorWidget(_animatorList[_flowAnimatorIndex]));
-    if (mounted) {
-      setState(() {});
-    }
+    animationWidgets.add(
+      ImageSlidePresentation(
+        phrases: phrases[0],
+        images: cacheImage,
+        onExitAnimationStarted: () async {
+          await Future.delayed(const Duration(milliseconds:800));
+          startAnimation = false;
+          if (mounted) {
+            setState(() {});
+          }
+        },
+      ),
+    );
+
+    // animationWidgets
+    //     .add(getFlowAnimatorWidget(_animatorList[_flowAnimatorIndex]));
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
   Widget getFlowAnimatorWidget(AnimatorModel model) {
@@ -335,20 +358,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     // imagees animation
-    bool lastOutXAxis = isOutXAxis;
-    final outAxis = Random().nextInt(2) == 0
-        ? ImageParallaxAnimAxis.X
-        : ImageParallaxAnimAxis.Y;
-    isOutXAxis = outAxis == ImageParallaxAnimAxis.X;
-    return ImageParallaxEffectAnimation(
-      bgImage: cacheImage[random.nextInt(6)],
-      // bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
-      inAxis: lastOutXAxis ? ImageParallaxAnimAxis.X : ImageParallaxAnimAxis.Y,
-      outAxis: outAxis,
-      onExitAnimation: () {
-        randomAnimation();
-      },
-    );
+    // bool lastOutXAxis = isOutXAxis;
+    // final outAxis = Random().nextInt(2) == 0
+    //     ? ImageParallaxAnimAxis.X
+    //     : ImageParallaxAnimAxis.Y;
+    // isOutXAxis = outAxis == ImageParallaxAnimAxis.X;
+    // return ImageParallaxEffectAnimation(
+    //   background: cacheImage[random.nextInt(6)],
+    //   // bgImage: "assets/images/image${random.nextInt(6) + 1}.jpg",
+    //   inAxis: lastOutXAxis ? ImageParallaxAnimAxis.X : ImageParallaxAnimAxis.Y,
+    //   outAxis: outAxis,
+    //   onExitAnimation: () {
+    //     randomAnimation();
+    //   },
+    // );
 
     // multiple text animations
     if (phrase.length == 1) {
