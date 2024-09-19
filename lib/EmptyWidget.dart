@@ -2,7 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class EmptyWidget extends StatelessWidget {
-  const EmptyWidget({super.key});
+  final VoidCallback backgroundImagePressed;
+  final VoidCallback kineticAnimationPressed;
+  final VoidCallback oneWordAnimationExample;
+  final VoidCallback twoWordAnimationExample;
+  final VoidCallback threeWordAnimationExample;
+  final VoidCallback fourWordAnimationExample;
+  final VoidCallback fiveWordAnimationExample;
+  final VoidCallback revealAnimationExample;
+  final VoidCallback cutoutAnimationExample;
+  const EmptyWidget({
+    required this.backgroundImagePressed,
+    required this.kineticAnimationPressed,
+    required this.oneWordAnimationExample,
+    required this.twoWordAnimationExample,
+    required this.threeWordAnimationExample,
+    required this.fourWordAnimationExample,
+    required this.fiveWordAnimationExample,
+    required this.revealAnimationExample,
+    required this.cutoutAnimationExample,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +40,124 @@ class EmptyWidget extends StatelessWidget {
                 .animate()
                 .scale(
                   curve: Curves.easeOutBack,
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 1000),
                 )
                 .fadeIn(
                   curve: Curves.easeOutBack,
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 1000),
                 ),
             Text(
-              "Animation Ended. Please Pressed Animation or random animation button to play the animation.",
-              style: Theme.of(context).textTheme.headlineMedium,
+              "Select Animation",
+              style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             )
                 .animate()
                 .slideY(
                   curve: Curves.easeOutBack,
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 1000),
                 )
                 .blurY(
                   begin: 15,
                   end: 0,
                   curve: Curves.easeOutBack,
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: backgroundImagePressed,
+              child: const Text('Background Image Animation'),
+            )
+                .animate()
+                .slideX(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                )
+                .blurX(
+                  begin: 15,
+                  end: 0,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: kineticAnimationPressed,
+              child: const Text('Example kinetic Animation'),
+            )
+                .animate()
+                .fadeIn(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                )
+                .blurXY(
+                  begin: 15,
+                  end: 0,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: oneWordAnimationExample,
+              child: const Text('One Word animation'),
+            )
+                .animate()
+                .slideX(
+                  begin: 1,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                )
+                .blurX(
+                  begin: 15,
+                  end: 0,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: twoWordAnimationExample,
+              child: const Text('Two Word animation'),
+            )
+                .animate()
+                .slideY(
+                  begin: 1,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                )
+                .blurY(
+                  begin: 15,
+                  end: 0,
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: threeWordAnimationExample,
+              child: const Text('Three Word animation'),
+            ).animate().flipV(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: fourWordAnimationExample,
+              child: const Text('Four Word animation'),
+            ).animate().flipH(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: fiveWordAnimationExample,
+              child: const Text('Five Word animation'),
+            ).animate().scaleXY(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: revealAnimationExample,
+              child: const Text('Reveal animation'),
+            ).animate().shake(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: cutoutAnimationExample,
+              child: const Text('Cutout animation'),
+            ).animate().shimmer(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
                 ),
           ],
         ),

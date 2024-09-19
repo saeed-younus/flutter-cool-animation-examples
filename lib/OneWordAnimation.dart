@@ -24,11 +24,11 @@ class _OneWordAnimationState extends State<OneWordAnimation> {
   Widget build(BuildContext context) {
     return random.nextInt(2) == 0
         ? RandomCharacterParent(
-            widget.word1,
+            widget.word1.toUpperCase(),
             onExitAnimation: widget.onExitAnimation,
           )
         : ScaledCharacterParent(
-            widget.word1,
+            widget.word1.toUpperCase(),
             onExitAnimation: widget.onExitAnimation,
           );
   }

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_animation_practice/RevealAnimations.dart';
+import 'package:uuid/uuid.dart';
 
 // n = negative axis
 // enum ImageParallaxAnimAxis {
@@ -38,11 +40,13 @@ class ImageParallaxEffectAnimation extends StatefulWidget {
   final ImageParallaxAnimAxis outAxis;
   final Widget background;
   final Widget? foreground;
+  final bool isFirst;
   final Function() onExitAnimation;
 
   const ImageParallaxEffectAnimation({
     required this.background,
     this.foreground,
+    required this.isFirst,
     required this.inAxis,
     required this.outAxis,
     required this.onExitAnimation,
@@ -59,6 +63,10 @@ class _ImageParallaxEffectAnimationState
   final Random _random = Random();
 
   final List<CustomClipper<Path>> _customClippers = [];
+
+  late final startDelay = Duration(
+    milliseconds: (!widget.isFirst ? (widget.inAxis is Z ? 1000 : 0) : 0),
+  );
 
   final List<CustomClipper<Path>> _clipperList = [
     CenterDiamond(),
@@ -96,8 +104,11 @@ class _ImageParallaxEffectAnimationState
     // }
 
     Future.delayed(
-      const Duration(milliseconds: 2600),
+      Duration(
+          milliseconds:
+              1000 + (!widget.isFirst ? (widget.inAxis is Z ? 1200 : 400) : 0)),
       () {
+        print('onExitAnimation');
         widget.onExitAnimation();
       },
     );
@@ -109,12 +120,14 @@ class _ImageParallaxEffectAnimationState
       children: [
         SizedBox.expand(
           child: widget.background
-              .animate()
+              .animate(
+                delay: startDelay,
+              )
               .scaleXY(
                 begin: widget.inAxis is Z ? 1 : 1.2,
                 end: 1.2,
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 800),
               )
               .slide(
                 begin: widget.inAxis is Z
@@ -125,129 +138,131 @@ class _ImageParallaxEffectAnimationState
                       ),
                 end: Offset.zero,
                 curve: Curves.ease,
-                duration: const Duration(milliseconds: 1200),
+                duration: const Duration(milliseconds: 800),
               )
-              .then(delay: const Duration(milliseconds: 1400))
+              .then(delay: const Duration(milliseconds: 200))
               .slide(
                 begin: Offset.zero,
                 end: Offset.zero,
                 curve: Curves.ease,
-                duration: const Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 1000),
               ),
         ),
         SizedBox.expand(
           child: ClipPath(
-            clipper: _customClippers[0],
-            child: widget.background
-                .animate()
-                .scaleXY(
-                  begin: widget.inAxis is Z ? 0.9 : 1.2,
-                  end: 1.2,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1400),
-                )
-                .slide(
-                  begin: Offset(
-                    widget.inAxis is X ? 0.15 : 0,
-                    widget.inAxis is Y ? 0.1 : 0,
-                  ),
-                  end: Offset.zero,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1400),
-                )
-                // .rotate(
-                //   begin: 0.05 * (_random.nextInt(3) - 1),
-                //   end: 0,
-                //   curve: Curves.ease,
-                //   duration: const Duration(milliseconds: 1400),
-                // )
-                .then(delay: const Duration(milliseconds: 1200))
-                .slide(
-                  begin: Offset.zero,
-                  end: Offset(
-                    widget.outAxis is X ? -0.15 : 0,
-                    widget.outAxis is Y ? -0.1 : 0,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 600),
-                ),
-          ),
+              clipper: _customClippers[0],
+              child: widget.background
+                  .animate(
+                    delay: startDelay,
+                  )
+                  .scaleXY(
+                    begin: widget.inAxis is Z ? 0.9 : 1.2,
+                    end: 1.2,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 800),
+                  )
+                  .slide(
+                    begin: Offset(
+                      widget.inAxis is X ? 0.15 : 0,
+                      widget.inAxis is Y ? 0.1 : 0,
+                    ),
+                    end: Offset.zero,
+                    curve: Curves.ease,
+                    duration: const Duration(milliseconds: 1100),
+                  )
+                  // .rotate(
+                  //   begin: 0.05 * (_random.nextInt(3) - 1),
+                  //   end: 0,
+                  //   curve: Curves.ease,
+                  //   duration: const Duration(milliseconds: 1400),
+                  // )
+                  .then(delay: const Duration(milliseconds: 200))
+              // .slide(
+              //   begin: Offset.zero,
+              //   end: Offset(
+              //     widget.outAxis is X ? -0.15 : 0,
+              //     widget.outAxis is Y ? -0.1 : 0,
+              //   ),
+              //   curve: Curves.ease,
+              //   duration: const Duration(milliseconds: 1000),
+              // ),
+              ),
         ),
         SizedBox.expand(
           child: ClipPath(
-            clipper: _customClippers[1],
-            child: widget.background
-                .animate()
-                .slide(
-                  begin: Offset(
-                    widget.inAxis is X ? 0.12 : 0,
-                    widget.inAxis is Y ? 0.1 : 0,
-                  ),
-                  end: Offset.zero,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1600),
-                )
-                .scaleXY(
-                  begin: widget.inAxis is Z ? 0.8 : 1.2,
-                  end: 1.2,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1600),
-                )
-                // .rotate(
-                //   begin: 0.04 * (_random.nextInt(3) - 1),
-                //   end: 0,
-                //   curve: Curves.ease,
-                //   duration: const Duration(milliseconds: 1600),
-                // )
-                .then(delay: const Duration(milliseconds: 1000))
-                .slide(
-                  begin: Offset.zero,
-                  end: Offset(
-                    widget.outAxis is X ? -0.12 : 0,
-                    widget.outAxis is Y ? -0.1 : 0,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 600),
-                ),
-          ),
+              clipper: _customClippers[1],
+              child: widget.background
+                  .animate(delay: startDelay)
+                  .scaleXY(
+                    begin: widget.inAxis is Z ? 0.8 : 1.2,
+                    end: 1.2,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 800),
+                  )
+                  .slide(
+                    begin: Offset(
+                      widget.inAxis is X ? 0.12 : 0,
+                      widget.inAxis is Y ? 0.1 : 0,
+                    ),
+                    end: Offset.zero,
+                    curve: Curves.ease,
+                    duration: const Duration(milliseconds: 1000),
+                  )
+                  // .rotate(
+                  //   begin: 0.04 * (_random.nextInt(3) - 1),
+                  //   end: 0,
+                  //   curve: Curves.ease,
+                  //   duration: const Duration(milliseconds: 1600),
+                  // )
+                  .then(delay: const Duration(milliseconds: 200))
+              // .slide(
+              //   begin: Offset.zero,
+              //   end: Offset(
+              //     widget.outAxis is X ? -0.12 : 0,
+              //     widget.outAxis is Y ? -0.1 : 0,
+              //   ),
+              //   curve: Curves.ease,
+              //   duration: const Duration(milliseconds: 1000),
+              // ),
+              ),
         ),
         SizedBox.expand(
           child: ClipPath(
-            clipper: _customClippers[2],
-            child: widget.background
-                .animate()
-                .slide(
-                  begin: Offset(
-                    widget.inAxis is X ? 0.17 : 0,
-                    widget.inAxis is Y ? 0.13 : 0,
-                  ),
-                  end: Offset.zero,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1700),
-                )
-                .scaleXY(
-                  begin: widget.inAxis is Z ? 0.7 : 1.2,
-                  end: 1.2,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1700),
-                )
-                // .rotate(
-                //   begin: 0.04 * (_random.nextInt(3) - 1),
-                //   end: 0,
-                //   curve: Curves.ease,
-                //   duration: const Duration(milliseconds: 1700),
-                // )
-                .then(delay: const Duration(milliseconds: 900))
-                .slide(
-                  begin: Offset.zero,
-                  end: Offset(
-                    widget.outAxis is X ? -0.17 : 0,
-                    widget.outAxis is Y ? -0.13 : 0,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 600),
-                ),
-          ),
+              clipper: _customClippers[2],
+              child: widget.background
+                  .animate(delay: startDelay)
+                  .slide(
+                    begin: Offset(
+                      widget.inAxis is X ? 0.3 : 0,
+                      widget.inAxis is Y ? 0.13 : 0,
+                    ),
+                    end: Offset.zero,
+                    curve: Curves.ease,
+                    duration: const Duration(milliseconds: 1100),
+                  )
+                  .scaleXY(
+                    begin: widget.inAxis is Z ? 0.7 : 1.2,
+                    end: 1.2,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 800),
+                  )
+                  // .rotate(
+                  //   begin: 0.04 * (_random.nextInt(3) - 1),
+                  //   end: 0,
+                  //   curve: Curves.ease,
+                  //   duration: const Duration(milliseconds: 1700),
+                  // )
+                  .then(delay: const Duration(milliseconds: 200))
+              // .slide(
+              //   begin: Offset.zero,
+              //   end: Offset(
+              //     widget.outAxis is X ? -0.17 : 0,
+              //     widget.outAxis is Y ? -0.13 : 0,
+              //   ),
+              //   curve: Curves.ease,
+              //   duration: const Duration(milliseconds: 1000),
+              // ),
+              ),
         ),
         widget.foreground == null
             ? const SizedBox()
@@ -259,100 +274,132 @@ class _ImageParallaxEffectAnimationState
               ),
         widget.foreground == null
             ? const SizedBox()
-            : widget.foreground!
-                .animate()
-                .fade(
-                  begin: 0.3,
-                  end: 1,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1200),
-                )
-                .slide(
-                  begin: Offset(
-                    widget.inAxis is X ? 0.5 : 0,
-                    widget.inAxis is Y ? 2 : 0,
-                  ),
-                  end: Offset.zero,
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1200),
-                )
-                .then(delay: const Duration(milliseconds: 1400))
-                .slide(
-                  begin: Offset.zero,
-                  end: Offset(
-                    widget.outAxis is X ? 0.25 : 0,
-                    widget.outAxis is Y ? 0.25 : 0,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1200),
-                )
-                .blur(
-                  begin: Offset.zero,
-                  end: const Offset(
-                    6,
-                    6,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 1200),
-                ),
+            : widget.inAxis is Z
+                ? Padding(
+                    padding: const EdgeInsets.all(48),
+                    child: WidgetRevealAnimtaion(
+                      delayInMilli: startDelay.inMilliseconds + 500,
+                      durationInMilli: 800,
+                      forward: true,
+                      onExitAnimation: () {},
+                      child: SizedBox(
+                        child: widget.foreground!,
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(48.0),
+                      child: widget.foreground!,
+                    ),
+                  )
+                    .animate(
+                      delay: Duration(
+                        milliseconds: startDelay.inMilliseconds,
+                      ),
+                    )
+                    .fade(
+                      begin: 0,
+                      end: 1,
+                      curve: Curves.ease,
+                      duration: const Duration(milliseconds: 1200),
+                    )
+                    .slide(
+                      begin: Offset(
+                        widget.inAxis is X ? 0.5 : 0,
+                        widget.inAxis is Y ? 2 : 0,
+                      ),
+                      end: Offset.zero,
+                      curve: Curves.ease,
+                      duration: const Duration(milliseconds: 1200),
+                    )
+                    .then(delay: const Duration(milliseconds: 200))
+                    // .slide(
+                    //   begin: Offset.zero,
+                    //   end: Offset(
+                    //     widget.outAxis is X ? 0.25 : 0,
+                    //     widget.outAxis is Y ? 0.25 : 0,
+                    //   ),
+                    //   curve: Curves.easeInCubic,
+                    //   duration: const Duration(milliseconds: 600),
+                    // ),
+        // .scaleXY(
+        //   begin: widget.inAxis is Z ? 0.5 : 1,
+        //   end: 1,
+        //   curve: Curves.ease,
+        //   duration: const Duration(milliseconds: 1200),
+        // ),
+        // .blur(
+        //   begin: Offset.zero,
+        //   end: const Offset(
+        //     6,
+        //     6,
+        //   ),
+        //   curve: Curves.easeInCubic,
+        //   duration: const Duration(milliseconds: 600),
+        // ),
       ],
     )
-        .animate()
+        .animate(
+          delay: startDelay,
+          onComplete: (controller) {
+            print('onComplete');
+          },
+        )
         .scaleXY(
           begin: widget.inAxis is Z ? 1 : 1,
           end: 1,
-          curve: Curves.easeInCubic,
-          duration: const Duration(milliseconds: 600),
+          curve: Curves.decelerate,
+          duration: const Duration(milliseconds: 1000),
         )
         .fade(
-          begin: widget.inAxis is Z ? 0 : 1,
+          begin: widget.inAxis is Z ? 1 : 1,
           end: 1,
-          curve: Curves.easeInCubic,
-          duration: const Duration(milliseconds: 600),
+          curve: Curves.decelerate,
+          delay: const Duration(milliseconds: 0),
+          duration: const Duration(milliseconds: 1000),
         )
         .slide(
           begin: Offset(
-            widget.inAxis is X ? 1 : 0,
-            widget.inAxis is Y ? 1 : 0,
+            widget.inAxis is X ? 1.2 : 0,
+            widget.inAxis is Y ? 1.2 : 0,
           ),
           end: Offset.zero,
           curve: Curves.ease,
-          duration: const Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 1000),
         )
         .then(
-          delay: Duration(
-            milliseconds: 2000 - (widget.outAxis is Z ? 300 : 0),
-          ),
+          delay: Duration(milliseconds: widget.outAxis is Z ? 200 : 600),
         )
         .slide(
           begin: Offset.zero,
           end: Offset(
-            widget.outAxis is X ? -1 : 0,
-            widget.outAxis is Y ? -1 : 0,
+            widget.outAxis is X ? -1.2 : 0,
+            widget.outAxis is Y ? -1.2 : 0,
           ),
           curve: Curves.ease,
-          duration: const Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 1000),
         )
         .scaleXY(
           begin: 1,
-          end: widget.outAxis is Z ? 3 : 1,
-          curve: Curves.easeInCubic,
-          duration: const Duration(milliseconds: 600),
+          end: widget.outAxis is Z ? 2.5 : 1,
+          curve: Curves.easeInExpo,
+          duration: const Duration(milliseconds: 1000),
         )
         .fade(
           begin: 1,
           end: widget.outAxis is Z ? 0 : 1,
-          curve: Curves.easeInCubic,
-          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInExpo,
+          duration: const Duration(milliseconds: 1000),
         )
         .blur(
           begin: Offset.zero,
           end: const Offset(
-            2,
-            2,
+            10,
+            10,
           ),
-          curve: Curves.easeInCubic,
-          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInExpo,
+          duration: const Duration(milliseconds: 1000),
         );
   }
 }

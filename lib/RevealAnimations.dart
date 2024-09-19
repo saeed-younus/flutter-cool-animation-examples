@@ -134,7 +134,7 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
 
   late final Reveals revealValue = Reveals.values[_randomIndex];
 
-  bool delayDone = false;
+  late bool delayDone = widget.delayInMilli == 0;
 
   @override
   Widget build(BuildContext context) {
@@ -244,31 +244,36 @@ class RevealAnimator extends StatelessWidget {
         );
       case Reveals.centerCircular:
         return ClipPath(
-          clipper: CenterCircularRevealClipper(animationValue),
+          clipper: SideHorizontalRevealClipper(animationValue),
+          // clipper: CenterCircularRevealClipper(animationValue),
           child: child,
         );
       case Reveals.topLeftCircular:
         return ClipPath(
-          clipper:
-              CenterCircularRevealClipper(animationValue, const Offset(-1, -1)),
+          clipper: SideHorizontalRevealClipper(animationValue),
+          // clipper:
+          //     CenterCircularRevealClipper(animationValue, const Offset(-1, -1)),
           child: child,
         );
       case Reveals.topRightCircular:
         return ClipPath(
-          clipper:
-              CenterCircularRevealClipper(animationValue, const Offset(1, -1)),
+          clipper: CenterVerticalRevealClipper(animationValue),
+          // clipper:
+          //     CenterCircularRevealClipper(animationValue, const Offset(1, -1)),
           child: child,
         );
       case Reveals.bottomLeftCircular:
         return ClipPath(
-          clipper:
-              CenterCircularRevealClipper(animationValue, const Offset(-1, 1)),
+          clipper: CenterVerticalRevealClipper(animationValue),
+          // clipper:
+          //     CenterCircularRevealClipper(animationValue, const Offset(-1, 1)),
           child: child,
         );
       case Reveals.bottomRightCircular:
         return ClipPath(
-          clipper:
-              CenterCircularRevealClipper(animationValue, const Offset(1, 1)),
+          clipper: CenterVerticalRevealClipper(animationValue),
+          // clipper:
+          //     CenterCircularRevealClipper(animationValue, const Offset(1, 1)),
           child: child,
         );
     }
@@ -456,12 +461,11 @@ class CenterCircularRevealClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final multiple = center == null
-        ? 0.85
+        ? 0.65
         : center!.dx == 0 && center!.dy == 0
-            ? 0.85
-            : 1.25;
-    final double radius =
-        (size.width > size.height ? size.width : size.height) * multiple;
+            ? 0.65
+            : 1.15;
+    final double radius = (size.width > size.height ? size.width : size.height);
     Path path = Path()
       ..addOval(
         Rect.fromCircle(

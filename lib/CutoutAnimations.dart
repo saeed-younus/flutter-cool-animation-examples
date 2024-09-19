@@ -197,19 +197,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? 0 : -10,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slideY(
+                  begin: 0,
+                  end: -2,
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slideY(
-            //   begin: 0,
-            //   end: -2,
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
             ClipPath(
               clipper: HalfRightRectangle(),
               child: widget,
@@ -222,19 +222,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? 0 : 10,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slideY(
+                  begin: 0,
+                  end: 2,
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slideY(
-            //   begin: 0,
-            //   end: 2,
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
           ],
         );
       case Cutouts.centerHorizontal:
@@ -252,19 +252,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? 0 : -5,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slideX(
+                  begin: 0,
+                  end: -2,
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slideX(
-            //   begin: 0,
-            //   end: -2,
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
             ClipPath(
               clipper: HalfBottomRectangle(),
               child: widget,
@@ -277,19 +277,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? 0 : 5,
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slideX(
+                  begin: 0,
+                  end: 2,
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slideX(
-            //   begin: 0,
-            //   end: 2,
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
           ],
         );
       case Cutouts.topRightBottomLeft:
@@ -307,19 +307,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? Offset.zero : const Offset(5, -5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slide(
+                  begin: Offset.zero,
+                  end: const Offset(5, -5),
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slide(
-            //   begin: Offset.zero,
-            //   end: const Offset(5, -5),
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
             ClipPath(
               clipper: RightBottomTriangle(),
               child: widget,
@@ -332,19 +332,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? Offset.zero : const Offset(-5, 5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slide(
+                  begin: Offset.zero,
+                  end: const Offset(-5, 5),
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slide(
-            //   begin: Offset.zero,
-            //   end: const Offset(-5, 5),
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
           ],
         );
       case Cutouts.topLeftBottomRight:
@@ -362,19 +362,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? Offset.zero : const Offset(-5, -5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slide(
+                  begin: Offset.zero,
+                  end: const Offset(-5, -5),
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slide(
-            //   begin: Offset.zero,
-            //   end: const Offset(-5 -5),
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
             ClipPath(
               clipper: LeftBottomTriangle(),
               child: widget,
@@ -387,19 +387,19 @@ class CutoutAnimator extends StatelessWidget {
                   end: forward ? Offset.zero : const Offset(5, 5),
                   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
                   duration: Duration(milliseconds: durationInMilli),
+                )
+                .then(delay: const Duration(milliseconds: 600))
+                .slide(
+                  begin: Offset.zero,
+                  end: const Offset(5, 5),
+                  curve: const Cubic(0.175, 0.885, 0.32, 1.1),
+                  duration: const Duration(milliseconds: 600),
+                )
+                .fade(
+                  begin: 1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 600),
                 ),
-            // .then(delay: const Duration(milliseconds: 600))
-            // .slide(
-            //   begin: Offset.zero,
-            //   end: const Offset(5, 5),
-            //   curve: const Cubic(0.175, 0.885, 0.32, 1.1),
-            //   duration: const Duration(milliseconds: 600),
-            // )
-            // .fade(
-            //   begin: 1,
-            //   end: 0,
-            //   duration: const Duration(milliseconds: 600),
-            // ),
           ],
         );
       default:

@@ -48,11 +48,12 @@ class _ImageSlidePresentationState extends State<ImageSlidePresentation> {
 
     isFirstTime = false;
 
-    slides.add(
+    slides.insert(
+      0,
       getNextSlide(widget.phrases[currentIndex]),
     );
     if (slides.length >= 3) {
-      slides.removeAt(0);
+      slides.removeAt(slides.length - 1);
     }
     currentIndex++;
 
@@ -76,6 +77,7 @@ class _ImageSlidePresentationState extends State<ImageSlidePresentation> {
 
     return ImageParallaxEffectAnimation(
       key: ValueKey(phrase),
+      isFirst: currentIndex == 0,
       // inAxis: Z(),
       // outAxis: Z(),
       inAxis: inAxis,
@@ -94,24 +96,38 @@ class _ImageSlidePresentationState extends State<ImageSlidePresentation> {
             width: MediaQuery.sizeOf(context).width,
             child: const SizedBox(),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(48),
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Text(
-                  phrase,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: ui.FontWeight.w900,
-                      ),
-                ),
-              ),
-            ),
-          ),
+          // Center(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(48),
+          //     child: FittedBox(
+          //       fit: BoxFit.cover,
+          //       child: Text(
+          //         phrase,
+          //         maxLines: 1,
+          //         textAlign: TextAlign.center,
+          //         style: Theme.of(context).textTheme.displayLarge?.copyWith(
+          //               color: Colors.white,
+          //               fontWeight: ui.FontWeight.w900,
+          //             ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
+      ),
+      foreground: FittedBox(
+        fit: BoxFit.cover,
+        child: Center(
+          child: Text(
+            phrase,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: ui.FontWeight.w900,
+                ),
+          ),
+        ),
       ),
       onExitAnimation: () {
         setSlide();
