@@ -113,6 +113,7 @@ class WidgetRevealAnimtaion extends StatefulWidget {
   final int delayInMilli;
   final int durationInMilli;
   final bool forward;
+  final bool boxOnly;
   final Function() onExitAnimation;
   const WidgetRevealAnimtaion({
     required this.child,
@@ -120,6 +121,7 @@ class WidgetRevealAnimtaion extends StatefulWidget {
     required this.durationInMilli,
     required this.forward,
     required this.onExitAnimation,
+    this.boxOnly = false,
     super.key,
   });
 
@@ -153,11 +155,17 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
                   });
                 },
                 builder: (context, value, child) {
-                  return RevealAnimator(
-                    animationValue: widget.forward ? 0 : 1,
-                    revealValue: revealValue,
-                    child: widget.child,
-                  );
+                  return widget.boxOnly
+                      ? BoxRevealAnimator(
+                          animationValue: widget.forward ? 0 : 1,
+                          revealValue: revealValue,
+                          child: widget.child,
+                        )
+                      : RevealAnimator(
+                          animationValue: widget.forward ? 0 : 1,
+                          revealValue: revealValue,
+                          child: widget.child,
+                        );
                 },
               )
             : TweenAnimationBuilder(
@@ -168,11 +176,17 @@ class _WidgetRevealAnimtaionState extends State<WidgetRevealAnimtaion> {
                 duration: Duration(milliseconds: widget.durationInMilli),
                 curve: Curves.ease,
                 builder: (context, value, child) {
-                  return RevealAnimator(
-                    animationValue: value,
-                    revealValue: revealValue,
-                    child: widget.child,
-                  );
+                  return widget.boxOnly
+                      ? BoxRevealAnimator(
+                          animationValue: value,
+                          revealValue: revealValue,
+                          child: widget.child,
+                        )
+                      : RevealAnimator(
+                          animationValue: value,
+                          revealValue: revealValue,
+                          child: widget.child,
+                        );
                 },
               ).animate(
                 delay: Duration(
@@ -274,6 +288,59 @@ class RevealAnimator extends StatelessWidget {
           clipper: CenterVerticalRevealClipper(animationValue),
           // clipper:
           //     CenterCircularRevealClipper(animationValue, const Offset(1, 1)),
+          child: child,
+        );
+    }
+  }
+}
+
+class BoxRevealAnimator extends StatelessWidget {
+  final double animationValue;
+  final Reveals revealValue;
+  final Widget child;
+  const BoxRevealAnimator({
+    required this.animationValue,
+    required this.revealValue,
+    required this.child,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (revealValue) {
+      case Reveals.topToBottom:
+        return ClipPath(
+          clipper: TopToBottomRevealClipper(animationValue),
+          child: child,
+        );
+      case Reveals.bottomToTop:
+        return ClipPath(
+          clipper: BottomToTopRevealClipper(animationValue),
+          child: child,
+        );
+      case Reveals.centerHorizontal:
+        return ClipPath(
+          clipper: CenterHorizontalRevealClipper(animationValue),
+          child: child,
+        );
+      case Reveals.centerVertical:
+        return ClipPath(
+          clipper: CenterVerticalRevealClipper(animationValue),
+          child: child,
+        );
+      case Reveals.sideHorizontal:
+        return ClipPath(
+          clipper: SideHorizontalRevealClipper(animationValue),
+          child: child,
+        );
+      case Reveals.sideVertical:
+        return ClipPath(
+          clipper: SideVerticalRevealClipper(animationValue),
+          child: child,
+        );
+      default:
+        return ClipPath(
+          clipper: CenterVerticalRevealClipper(animationValue),
           child: child,
         );
     }

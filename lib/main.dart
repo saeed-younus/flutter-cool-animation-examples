@@ -15,6 +15,7 @@ import 'package:flutter_animation_practice/ThreeWordsAnimation.dart';
 import 'package:flutter_animation_practice/TwoWordsAnimation.dart';
 import 'package:flutter_animation_practice/models/AnimationModel.dart';
 import 'package:flutter_animation_practice/models/AnimatorModel.dart';
+import 'package:flutter_animation_practice/presentations/CompleteQuotePresentation.dart';
 import 'package:flutter_animation_practice/presentations/ImageSlidePresentation.dart';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as image;
@@ -595,6 +596,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   cutoutAnimationExample: () {
                     startCutoutAnimation();
+                  },
+                  completeQuoteAnimationWithoutBgExample: () {
+                    startQuoteAnimationWithoutBg();
                   },
                 )
               : Stack(
@@ -1656,6 +1660,61 @@ class _MyHomePageState extends State<MyHomePage> {
             key: ValueKey(const Uuid().v4()),
             onExitAnimation: () {
               iterateCutoutAnimation(words, index + 1);
+            },
+          ),
+        );
+      }
+    });
+  }
+
+  void startQuoteAnimationWithoutBg() {
+    setState(() {
+      _flowAnimatorIndex = 0;
+      animationWidgets.clear();
+      startAnimation = !startAnimation;
+
+      if (startAnimation) {
+        final phrase =
+            dynamicLengthPhrases[Random().nextInt(dynamicLengthPhrases.length)];
+
+        animationWidgets.add(
+          CompleteQuotePresentaition(
+            key: ValueKey(const Uuid().v4()),
+            quote: phrase,
+            bgImage: null,
+            onExitAnimation: () {
+              setState(() {
+                final phrase = dynamicLengthPhrases[
+                    Random().nextInt(dynamicLengthPhrases.length)];
+                animationWidgets.clear();
+                animationWidgets.add(
+                  CompleteQuotePresentaition(
+                    key: ValueKey(const Uuid().v4()),
+                    quote: phrase,
+                    bgImage: null,
+                    onExitAnimation: () {
+                      setState(() {
+                        final phrase = dynamicLengthPhrases[
+                            Random().nextInt(dynamicLengthPhrases.length)];
+                        animationWidgets.clear();
+                        animationWidgets.add(
+                          CompleteQuotePresentaition(
+                            key: ValueKey(const Uuid().v4()),
+                            quote: phrase,
+                            bgImage: null,
+                            onExitAnimation: () {
+                              setState(() {
+                                startAnimation = false;
+                                return;
+                              });
+                            },
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                );
+              });
             },
           ),
         );
