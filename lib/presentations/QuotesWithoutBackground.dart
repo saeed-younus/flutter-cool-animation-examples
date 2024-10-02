@@ -189,11 +189,6 @@ class _QuotesWithoutBackgroundState extends State<QuotesWithoutBackground> {
 
   @override
   Widget build(BuildContext context) {
-    return QuotesReveal(
-      key: widget.key,
-      onExitAnimation: widget.onExitAnimation,
-      quote: widget.quote,
-    );
     return ColoredBox(
       color: Colors.black,
       child: Center(

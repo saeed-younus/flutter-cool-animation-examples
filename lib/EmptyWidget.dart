@@ -12,6 +12,7 @@ class EmptyWidget extends StatelessWidget {
   final VoidCallback revealAnimationExample;
   final VoidCallback cutoutAnimationExample;
   final VoidCallback completeQuoteAnimationWithoutBgExample;
+  final VoidCallback sample1;
   const EmptyWidget({
     required this.backgroundImagePressed,
     required this.kineticAnimationPressed,
@@ -23,6 +24,7 @@ class EmptyWidget extends StatelessWidget {
     required this.revealAnimationExample,
     required this.cutoutAnimationExample,
     required this.completeQuoteAnimationWithoutBgExample,
+    required this.sample1,
     super.key,
   });
 
@@ -165,6 +167,13 @@ class EmptyWidget extends StatelessWidget {
               onPressed: completeQuoteAnimationWithoutBgExample,
               child: const Text('Quote animation Without bg'),
             ).animate().shakeY(
+                  curve: Curves.easeOutBack,
+                  duration: const Duration(milliseconds: 1000),
+                ),
+            ElevatedButton(
+              onPressed: sample1,
+              child: const Text('Sample 1'),
+            ).animate().fadeIn(
                   curve: Curves.easeOutBack,
                   duration: const Duration(milliseconds: 1000),
                 ),

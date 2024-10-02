@@ -42,6 +42,7 @@ dependencies:
   widget_and_text_animator: ^1.1.5
   google_fonts: ^6.2.1
   collection: 1.18.0
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:

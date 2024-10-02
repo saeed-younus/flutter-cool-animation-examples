@@ -7,10 +7,16 @@ import 'package:collection/collection.dart';
 class QuotesReveal extends StatefulWidget {
   final VoidCallback onExitAnimation;
   final String quote;
+  final bool seperateCharacter;
+  final bool xAxis;
+  final bool outGoingXAxis;
 
   const QuotesReveal({
     required this.onExitAnimation,
     required this.quote,
+    required this.seperateCharacter,
+    required this.xAxis,
+    required this.outGoingXAxis,
     super.key,
   });
 
@@ -21,8 +27,6 @@ class QuotesReveal extends StatefulWidget {
 class _QuotesRevealState extends State<QuotesReveal> {
   int randomIndex = 0;
   List<String> result = [];
-  bool seperateCharacter = Random().nextBool();
-  bool xAxis = Random().nextBool();
 
   @override
   void initState() {
@@ -76,14 +80,47 @@ class _QuotesRevealState extends State<QuotesReveal> {
                   (index, lineText) => QuoteRevealItem(
                     lineText: lineText,
                     index: index,
-                    seperateCharacter: seperateCharacter,
-                    xAxis: xAxis,
+                    seperateCharacter: widget.seperateCharacter,
+                    xAxis: widget.xAxis,
                   ),
                 ),
               ],
             ),
           ],
-        ),
+        )
+            .animate(
+              delay: Duration(
+                milliseconds: (result.length * 1000) + 500,
+              ),
+            )
+            .slideX(
+              begin: 0,
+              end: widget.outGoingXAxis ? -1 : 0,
+              duration: const Duration(
+                milliseconds: 500,
+              ),
+            )
+            .slideY(
+              begin: 0,
+              end: widget.outGoingXAxis ? 0 : -1,
+              duration: const Duration(
+                milliseconds: 500,
+              ),
+            )
+            .blurX(
+              begin: 0,
+              end: widget.outGoingXAxis ? 20 : 0,
+              duration: const Duration(
+                milliseconds: 500,
+              ),
+            )
+            .blurY(
+              begin: 0,
+              end: widget.outGoingXAxis ? 0 : 20,
+              duration: const Duration(
+                milliseconds: 500,
+              ),
+            ),
       ),
     );
   }
@@ -189,10 +226,11 @@ class QuoteRevealItem extends StatelessWidget {
                                     begin: 1,
                                     end: 0,
                                     duration: const Duration(
-                                      milliseconds: 600,
+                                      milliseconds: 400,
                                     ),
                                     delay: Duration(
-                                      milliseconds: index * 1000,
+                                      milliseconds:
+                                          (index * 1000) + (indexString * 250),
                                     ),
                                     curve: Curves.ease,
                                   )

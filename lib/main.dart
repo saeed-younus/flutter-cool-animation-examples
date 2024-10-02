@@ -17,6 +17,7 @@ import 'package:flutter_animation_practice/models/AnimationModel.dart';
 import 'package:flutter_animation_practice/models/AnimatorModel.dart';
 import 'package:flutter_animation_practice/presentations/CompleteQuotePresentation.dart';
 import 'package:flutter_animation_practice/presentations/ImageSlidePresentation.dart';
+import 'package:flutter_animation_practice/presentations/SamplePresentation1.dart';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as image;
 import 'package:flutter_animation_practice/utils/dart_image.dart';
@@ -599,6 +600,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   completeQuoteAnimationWithoutBgExample: () {
                     startQuoteAnimationWithoutBg();
+                  },
+                  sample1: () {
+                    startSample1();
                   },
                 )
               : Stack(
@@ -1719,6 +1723,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       }
+    });
+  }
+
+  void startSample1() {
+    setState(() {
+      _flowAnimatorIndex = 0;
+      animationWidgets.clear();
+      startAnimation = true;
+
+      animationWidgets.add(
+        Samplepresentation1(
+          quotes: dynamicLengthPhrases.take(4).toList(),
+          onExitAnimation: () {
+            setState(() {
+              _flowAnimatorIndex = 0;
+              animationWidgets.clear();
+              startAnimation = false;
+            });
+          },
+        ),
+      );
     });
   }
 
